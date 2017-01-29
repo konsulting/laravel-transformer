@@ -1,0 +1,38 @@
+{
+    "name": "konsulting/transformer",
+    "description": "A simple way to transform data, with helpers for transforming data in Laravel requests.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Robin D'Arcy",
+            "email": "robin@klever.co.uk"
+        },
+        {
+            "name": "Keoghan Litchfield",
+            "email": "keoghan@klever.co.uk"
+        }
+    ],
+    "require": {
+        "php": "^7.0",
+        "konsulting/laravel-extend-collections": "dev-master"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.6",
+        "tightenco/collect": "^5.3",
+        "nesbot/carbon": "^1.22"
+    },
+    "autoload": {
+        "psr-4": {
+            "Konsulting\\Transformer\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "classmap": ["tests"]
+    },
+    "repositories": [
+        {
+            "type":"vcs",
+            "url":"/Users/keoghan/Code/laravel-extend-collections"
+        }
+    ]
+}
