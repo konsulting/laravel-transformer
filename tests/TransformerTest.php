@@ -56,4 +56,29 @@ class TransformerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(Carbon::class, $transformer->go()['a']);
     }
+
+    /** @test */
+    function it_applies_rules_to_nested_elements()
+    {
+        $data = ['a' => [['name' => 'a', 'title' => 'mr'],['name' => 'b'],['name' => 'c']]];
+        $expected = ['a' => [['name' => 'A', 'title' => 'mr'],['name' => 'B'],['name' => 'C']]];
+
+        $transformer = new Transformer($data, ['a.*.name' => 'uppercase']);
+        $this->assertEquals($expected, $transformer->go()->toArray());
+
+        $expected = ['a' => [['name' => 'A', 'title' => 'MR'],['name' => 'B'],['name' => 'C']]];
+
+        $transformer = new Transformer($data, ['a.*.*' => 'uppercase']);
+        $this->assertEquals($expected, $transformer->go()->toArray());
+    }
+
+    /** @test */
+    function it_applies_a_rule_to_all_data_at_a_single_level()
+    {
+        $data = ['a' => 'a', 'b' => 'b', 'c' => 'c'];
+        $expected = ['a' => 'A', 'b' => 'B', 'c' => 'C'];
+
+        $transformer = new Transformer($data, ['*' => 'uppercase']);
+        $this->assertEquals($expected, $transformer->go()->toArray());
+    }
 }

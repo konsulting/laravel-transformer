@@ -191,8 +191,8 @@ class Transformer
     protected function findMatchingFields($fieldExpression)
     {
         $matches = [];
-        $regex = str_replace(['.', '*'], ['\.', '[^\\.|]*'], $fieldExpression);
-        preg_match_all("/({$regex}[^\\.|]*)/", $this->dataKeysForRegex, $matches);
+        $regex = str_replace(['.', '*'], ['\.', '[^\\.|]+'], $fieldExpression);
+        preg_match_all("/({$regex})/", $this->dataKeysForRegex, $matches);
 
         return array_unique($matches[0]);
     }
