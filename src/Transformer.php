@@ -24,13 +24,13 @@ class Transformer
         $this->setRules($rules);
     }
 
-    public function setData($data)
+    public function setData($data = [])
     {
         $this->data = Collection::make($data)->dot();
         $this->dataKeysForRegex = $this->data->keys()->implode('|');
     }
 
-    public function setRules($rules)
+    public function setRules($rules = [])
     {
         $this->rules = $rules;
     }
@@ -91,20 +91,23 @@ class Transformer
     }
 
     /**
-     * Named constructor
+     * Perform the transformation
      *
-     * @param       $data
-     * @param array $rules
+     * @param null $data
+     * @param null $rules
      *
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return Collection
      */
-    public static function transform($data, $rules)
+    public function transform($data = null, $rules = null)
     {
-        return (new static($data, $rules))->go();
-    }
+        if ($data) {
+            $this->setData($data);
+        }
 
-    public function go()
-    {
+        if ($rules) {
+            $this->setRules($rules);
+        }
+
         $this->parseRules();
         $this->applyRules();
 

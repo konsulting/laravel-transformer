@@ -11,7 +11,7 @@ trait TransformsData
      */
     protected function transform($data, $rules = null)
     {
-        return Transformer::transform($data, is_null($rules) ? $this->transformRules() : $rules);
+        return $this->transformer()->transform($data, is_null($rules) ? $this->transformRules() : $rules);
     }
 
     /**
@@ -22,5 +22,15 @@ trait TransformsData
     public function transformRules()
     {
         return [];
+    }
+
+    /**
+     * Get the transformer for the application. Means it can be built up in a service provider if required.
+     *
+     * @return \Illuminate\Foundation\Application|mixed
+     */
+    public function transformer()
+    {
+        return app(Transformer::class);
     }
 }
