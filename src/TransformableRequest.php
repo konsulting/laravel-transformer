@@ -4,6 +4,8 @@ namespace Konsulting\Transformer;
 
 trait TransformableRequest
 {
+    use TransformsData;
+
     /**
      * To cache the transformed data.
      * @var

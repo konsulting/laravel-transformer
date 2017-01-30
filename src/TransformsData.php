@@ -9,7 +9,7 @@ trait TransformsData
      * @param array                                $rules
      * @return Collection
      */
-    protected function transform($data, $rules = null)
+    public function transform($data, $rules = null)
     {
         return $this->transformer()->transform($data, is_null($rules) ? $this->transformRules() : $rules);
     }
