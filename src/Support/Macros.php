@@ -2,6 +2,7 @@
 
 namespace Konsulting\Transformer\Support;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
 class Macros
