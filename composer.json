@@ -32,7 +32,7 @@
     "repositories": [
         {
             "type":"vcs",
-            "url":"/Users/keoghan/Code/laravel-extend-collections"
+            "url":"/Users/robin/Code/laravel-extend-collections"
         }
     ]
 }

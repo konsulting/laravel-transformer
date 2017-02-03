@@ -6,6 +6,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Konsulting\Transformer\Exceptions\InvalidRule;
 use Konsulting\Transformer\Exceptions\UnexpectedValue;
+use Konsulting\Transformer\RulePacks\LoadableRulePack;
 
 class Transformer
 {
@@ -215,6 +216,11 @@ class Transformer
         }
 
         return $this;
+    }
+
+    public function addRulePack(LoadableRulePack $rulePack)
+    {
+        return $rulePack->loadTo($this);
     }
 
     /***********************************************************

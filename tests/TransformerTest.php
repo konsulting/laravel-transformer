@@ -3,6 +3,7 @@
 namespace Konsulting\Transformer;
 
 use Carbon\Carbon;
+use Konsulting\Transformer\RulePacks\CarbonRulePack;
 
 class TransformerTest extends \PHPUnit_Framework_TestCase
 {
@@ -42,6 +43,7 @@ class TransformerTest extends \PHPUnit_Framework_TestCase
     {
         $this->transformer->addRuleMethod('ruleNewBail', function ($value) {
             $this->bail = true;
+
             return $value;
         });
 
@@ -51,20 +53,32 @@ class TransformerTest extends \PHPUnit_Framework_TestCase
     /** @test */
     function an_array_of_new_methods_can_be_added()
     {
-        $this->transformer->addRuleMethod(require __DIR__ . '/../rule_packs/konsulting_datetime.php');
+        $ruleArray = [
+            'ruleMakeDots'  => function ($value) {
+                return str_repeat('.', strlen($value));
+            },
+            'ruleMakeStars' => function ($value) {
+                return str_repeat('*', strlen($value));
+            }
+        ];
 
-        $this->assertInstanceOf(Carbon::class, $this->transformer->transform(['a' => '2016-01-01'], ['a' => 'to_carbon:Y-m-d'])['a']);
+        $this->transformer->addRuleMethod($ruleArray);
+
+        $this->assertEquals(
+            ['a' => '........', 'b' => '*****'],
+            $this->transformer->transform(['a' => '12345678', 'b' => '12345'], ['a' => 'make_dots', 'b' => 'make_stars'])->toArray()
+        );
     }
 
     /** @test */
     function it_applies_rules_to_nested_elements()
     {
-        $data = ['a' => [['name' => 'a', 'title' => 'mr'],['name' => 'b'],['name' => 'c']]];
+        $data = ['a' => [['name' => 'a', 'title' => 'mr'], ['name' => 'b'], ['name' => 'c']]];
 
-        $expected = ['a' => [['name' => 'A', 'title' => 'mr'],['name' => 'B'],['name' => 'C']]];
+        $expected = ['a' => [['name' => 'A', 'title' => 'mr'], ['name' => 'B'], ['name' => 'C']]];
         $this->assertEquals($expected, $this->transformer->transform($data, ['a.*.name' => 'uppercase'])->toArray());
 
-        $expected = ['a' => [['name' => 'A', 'title' => 'MR'],['name' => 'B'],['name' => 'C']]];
+        $expected = ['a' => [['name' => 'A', 'title' => 'MR'], ['name' => 'B'], ['name' => 'C']]];
         $this->assertEquals($expected, $this->transformer->transform($data, ['a.*.*' => 'uppercase'])->toArray());
     }
 
@@ -75,5 +89,11 @@ class TransformerTest extends \PHPUnit_Framework_TestCase
         $expected = ['a' => 'A', 'b' => 'B', 'c' => 'C'];
 
         $this->assertEquals($expected, $this->transformer->transform($data, ['*' => 'uppercase'])->toArray());
+    }
+
+    /** @test */
+    function it_loads_rules_from_a_rule_pack_class()
+    {
+        $this->transformer->addRulePack(new CarbonRulePack);
     }
 }
