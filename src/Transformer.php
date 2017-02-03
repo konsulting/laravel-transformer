@@ -6,41 +6,119 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Konsulting\Transformer\Exceptions\InvalidRule;
 use Konsulting\Transformer\Exceptions\UnexpectedValue;
+use Konsulting\Transformer\RulePacks\LoadableRulePack;
 
+/**
+ * Class Transformer
+ *
+ * @package Konsulting\Transformer
+ */
 class Transformer
 {
-    protected $data;
+    /**
+     * Associative array of data to be processed.
+     *
+     * @var array
+     */
+    protected $data = [];
+    /**
+     * Associative array of rules to be applied to the data.
+     *
+     * @var array
+     */
     protected $rules = [];
 
+    /**
+     * An array of parsed rules.
+     *
+     * @var array
+     */
     protected $parsedRules = [];
+    /**
+     * @var array
+     */
     protected $dataKeysForRegex = [];
 
+    /**
+     * Flag indicating that rule processing should be halted.
+     *
+     * @var bool
+     */
     protected $bail;
+    /**
+     * @var array
+     */
     protected $ruleMethods = [];
 
-    public function __construct($data = [], $rules = [])
+    /**
+     * Transformer constructor.
+     *
+     * @param array $data
+     * @param array $rules
+     */
+    public function __construct(array $data = [], array $rules = [])
     {
-        $this->setData($data);
-        $this->setRules($rules);
+        $this->setData($data)->setRules($rules);
     }
 
-    public function setData($data = [])
+    /**
+     * Perform the transformation
+     *
+     * @param null $data
+     * @param null $rules
+     *
+     * @return Collection
+     */
+    public function transform($data = null, $rules = null): Collection
+    {
+        if ($data) {
+            $this->setData($data);
+        }
+
+        if ($rules) {
+            $this->setRules($rules);
+        }
+
+        $this->parseRules()->applyRules();
+
+        return $this->data->fromDot();
+    }
+
+    /**
+     * Set the data that rules are to be applied to.
+     *
+     * @param array $data
+     *
+     * @return self
+     */
+    public function setData(array $data = []): self
     {
         $this->data = Collection::make($data)->dot();
         $this->dataKeysForRegex = $this->data->keys()->implode('|');
+
+        return $this;
     }
 
-    public function setRules($rules = [])
+    /**
+     * Set the rules that will be applied to the data.
+     *
+     * @param array $rules
+     *
+     * @return self
+     */
+    public function setRules(array $rules = []): self
     {
         $this->rules = $rules;
+
+        return $this;
     }
 
     /**
      * Parse rules given an array of rules [field1 => [rule1|rule2, field2 => [rule1|rule2]]
      *
-     * @return array
+     * @return self
      */
-    protected function parseRules()
+    protected function parseRules(): self
     {
         foreach ($this->rules as $fieldExpression => $combination) {
             $fields = $this->findMatchingFields($fieldExpression);
@@ -50,6 +128,8 @@ class Transformer
                 $this->parseRuleCombination($combination)
             ));
         }
+
+        return $this;
     }
 
     /**
@@ -57,9 +137,9 @@ class Transformer
      *
      * @param $combination
      *
-     * @return mixed
+     * @return array
      */
-    protected function parseRuleCombination($combination)
+    protected function parseRuleCombination($combination): array
     {
         $ruleSet = [];
 
@@ -80,7 +160,7 @@ class Transformer
     {
         $split = [];
 
-        if (! preg_match('/^([\w]+):?([\w-,]*)?$/', $expression, $split)) {
+        if ( ! preg_match('/^([\w]+):?([\w-,]*)?$/', $expression, $split)) {
             throw new UnexpectedValue('Transform rules not in recognised format rule:param1,param2');
         }
 
@@ -91,39 +171,18 @@ class Transformer
     }
 
     /**
-     * Perform the transformation
-     *
-     * @param null $data
-     * @param null $rules
-     *
-     * @return Collection
-     */
-    public function transform($data = null, $rules = null)
-    {
-        if ($data) {
-            $this->setData($data);
-        }
-
-        if ($rules) {
-            $this->setRules($rules);
-        }
-
-        $this->parseRules();
-        $this->applyRules();
-
-        return $this->data->fromDot();
-    }
-
-    /**
      * Apply the parsed rules to the input
      *
+     * @return self
      * @throws \Konsulting\Transformer\Exceptions\InvalidFieldException
      */
-    protected function applyRules()
+    protected function applyRules(): self
     {
         foreach (array_keys($this->parsedRules) as $field) {
             $this->executeRules($field);
         }
+
+        return $this;
     }
 
     /**
@@ -146,6 +205,11 @@ class Transformer
         }
     }
 
+    /**
+     * @param $name
+     * @param $parameters
+     * @return mixed
+     */
     public function __call($name, $parameters)
     {
         if ($this->ruleMethods[$name]) {
@@ -165,7 +229,7 @@ class Transformer
     {
         $ruleMethod = $this->getRuleMethod($rule);
 
-        if (! method_exists($this, $ruleMethod)
+        if ( ! method_exists($this, $ruleMethod)
             && ! isset($this->ruleMethods[$ruleMethod])
         ) {
             throw new InvalidRule($rule);
@@ -201,9 +265,14 @@ class Transformer
     }
 
 
+    /**
+     * @param      $key
+     * @param null $closure
+     * @return $this
+     */
     public function addRuleMethod($key, $closure = null)
     {
-        if (! is_array($key)) {
+        if ( ! is_array($key)) {
             $this->ruleMethods[$key] = \Closure::bind($closure, $this, $this);
 
             return $this;
@@ -212,6 +281,28 @@ class Transformer
         $rules = $key;
         foreach ($rules as $key => $closure) {
             $this->addRuleMethod($key, $closure);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param LoadableRulePack $rulePack
+     * @return Transformer
+     */
+    public function addRulePack(LoadableRulePack $rulePack)
+    {
+        return $rulePack->loadTo($this);
+    }
+
+    /**
+     * @param array $rulePacks
+     * @return $this
+     */
+    public function addRulePacks(array $rulePacks)
+    {
+        foreach ($rulePacks as $rulePack) {
+            $this->addRulePack(new $rulePack);
         }
 
         return $this;
@@ -247,6 +338,10 @@ class Transformer
         return $value;
     }
 
+    /**
+     * @param $value
+     * @return null
+     */
     protected function ruleReturnNullIfEmpty($value)
     {
         $value = isEmpty($value) ? null : $value;
@@ -265,18 +360,26 @@ class Transformer
      */
     protected function ruleTrim($value)
     {
-        if (! is_string($value)) {
+        if ( ! is_string($value)) {
             return $value;
         }
 
         return trim($value);
     }
 
+    /**
+     * @param $value
+     * @return string
+     */
     public function ruleUppercase($value)
     {
         return strtoupper($value);
     }
 
+    /**
+     * @param $value
+     * @return string
+     */
     public function ruleLowercase($value)
     {
         return strtolower($value);

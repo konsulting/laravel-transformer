@@ -31,8 +31,8 @@
     },
     "repositories": [
         {
-            "type" : "vcs",
-            "url" : "git@bitbucket.org:konsulting/laravel-extend-collections.git"
+            "type":"vcs",
+            "url":"/Users/robin/Code/laravel-extend-collections"
         }
     ]
 }
