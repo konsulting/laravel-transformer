@@ -223,6 +223,13 @@ class Transformer
         return $rulePack->loadTo($this);
     }
 
+    public function addRulePacks(array $rulePacks)
+    {
+        foreach ($rulePacks as $rulePack) {
+            $this->addRulePack(new $rulePack);
+        }
+    }
+
     /***********************************************************
      *
      *                      RULE METHODS
