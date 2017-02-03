@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace Konsulting\Transformer\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Konsulting\Transformer\Support\Macros;
