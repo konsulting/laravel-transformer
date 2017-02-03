@@ -4,6 +4,7 @@ namespace Konsulting\Transformer;
 
 use Carbon\Carbon;
 use Konsulting\Transformer\RulePacks\CarbonRulePack;
+use Konsulting\Transformer\RulePacks\CoreRulePack;
 
 class TransformerTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,7 +14,7 @@ class TransformerTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->transformer = new Transformer();
+        $this->transformer = (new Transformer)->addRulePack(new CoreRulePack);
     }
 
     /** @test */

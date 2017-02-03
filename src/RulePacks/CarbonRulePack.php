@@ -6,6 +6,11 @@ use Carbon\Carbon;
 
 class CarbonRulePack extends LoadableRulePack
 {
+    /**
+     * Return an array of closures containing the rules to load.
+     *
+     * @return array
+     */
     public function rules(): array
     {
         return [

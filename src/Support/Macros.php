@@ -10,9 +10,9 @@ class Macros
     /**
      * Apply macros to the Arr class.
      *
-     * @return void
+     * @return self
      */
-    public static function addArrayMacros(): void
+    public function addArrayMacros(): self
     {
         if ( ! Arr::hasMacro('fromDot')) {
             Arr::macro('fromDot', function ($array, $separator = '.', $part = null) {
@@ -66,14 +66,16 @@ class Macros
                 return $result;
             });
         }
+
+        return $this;
     }
 
     /**
      * Apply macros to Collection class.
      *
-     * @return void
+     * @return self
      */
-    public static function addCollectionMacros(): void
+    public function addCollectionMacros(): self
     {
         if ( ! Collection::hasMacro('dropEmpty')) {
             Collection::macro('dropEmpty', function () {
@@ -137,5 +139,7 @@ class Macros
                 return new static(Arr::fromDot($this->all(), '.', $part));
             });
         }
+
+        return $this;
     }
 }

@@ -4,21 +4,12 @@ namespace Konsulting\Transformer\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Konsulting\Transformer\RulePacks\CarbonRulePack;
+use Konsulting\Transformer\RulePacks\CoreRulePack;
 use Konsulting\Transformer\Transformer;
 
 
 class TransformerServiceProvider extends ServiceProvider
 {
-    /**
-     * Bootstrap the application services.
-     *
-     * @return void
-     */
-    public function boot() : void
-    {
-        //
-    }
-
     /**
      * Register the application services.
      *
@@ -27,7 +18,8 @@ class TransformerServiceProvider extends ServiceProvider
     public function register() : void
     {
         $this->app->singleton(Transformer::class, function ($app) : Transformer {
-            return (new Transformer())->addRulePacks($this->rulePacks());
+            return (new Transformer())
+                ->addRulePacks($this->rulePacks());
         });
     }
 
@@ -39,7 +31,8 @@ class TransformerServiceProvider extends ServiceProvider
     public function rulePacks() : array
     {
         return [
-            CarbonRulePack::class
+            CoreRulePack::class,
+            CarbonRulePack::class,
         ];
     }
 }

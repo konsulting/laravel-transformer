@@ -8,5 +8,6 @@ require __DIR__ . '/../vendor/konsulting/laravel-extend-collections/src/collecti
 // Dummy the Laravel function for locating things in the container, for testing purposes
 function app($dummy)
 {
-    return new Konsulting\Transformer\Transformer;
+    return (new Konsulting\Transformer\Transformer)
+        ->addRulePack(new \Konsulting\Transformer\RulePacks\CoreRulePack);
 }
