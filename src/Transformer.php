@@ -1,17 +1,17 @@
 <?php
 
-namespace Konsulting\Transformer;
+namespace Konsulting\Laravel\Transformer;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Konsulting\Transformer\Exceptions\InvalidRule;
-use Konsulting\Transformer\Exceptions\UnexpectedValue;
-use Konsulting\Transformer\RulePacks\LoadableRulePack;
+use Konsulting\Laravel\Transformer\Exceptions\InvalidRule;
+use Konsulting\Laravel\Transformer\Exceptions\UnexpectedValue;
+use Konsulting\Laravel\Transformer\RulePacks\LoadableRulePack;
 
 /**
  * Class Transformer
  *
- * @package Konsulting\Transformer
+ * @package Konsulting\Laravel\Transformer
  */
 class Transformer
 {
@@ -154,7 +154,7 @@ class Transformer
      * @param $expression
      *
      * @return mixed
-     * @throws \Konsulting\Transformer\Exceptions\UnexpectedValue*
+     * @throws \Konsulting\Laravel\Transformer\Exceptions\UnexpectedValue*
      */
     protected function parseRuleExpression($expression)
     {
@@ -174,7 +174,7 @@ class Transformer
      * Apply the parsed rules to the input
      *
      * @return self
-     * @throws \Konsulting\Transformer\Exceptions\InvalidFieldException
+     * @throws \Konsulting\Laravel\Transformer\Exceptions\InvalidFieldException
      */
     protected function applyRules(): self
     {
@@ -223,7 +223,7 @@ class Transformer
      * @param $rule
      *
      * @return mixed
-     * @throws \Konsulting\Transformer\Exceptions\InvalidRule
+     * @throws \Konsulting\Laravel\Transformer\Exceptions\InvalidRule
      */
     protected function validateRule($rule)
     {

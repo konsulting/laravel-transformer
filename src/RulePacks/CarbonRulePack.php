@@ -1,6 +1,6 @@
 <?php
 
-namespace Konsulting\Transformer\RulePacks;
+namespace Konsulting\Laravel\Transformer\RulePacks;
 
 use Carbon\Carbon;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Konsulting\Transformer\Exceptions;
+namespace Konsulting\Laravel\Transformer\Exceptions;
 
 use Exception;
 

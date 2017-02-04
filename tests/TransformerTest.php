@@ -1,10 +1,9 @@
 <?php
 
-namespace Konsulting\Transformer;
+namespace Konsulting\Laravel\Transformer;
 
-use Carbon\Carbon;
-use Konsulting\Transformer\RulePacks\CarbonRulePack;
-use Konsulting\Transformer\RulePacks\CoreRulePack;
+use Konsulting\Laravel\Transformer\RulePacks\CoreRulePack;
+use Konsulting\Laravel\Transformer\RulePacks\CarbonRulePack;
 
 class TransformerTest extends \PHPUnit_Framework_TestCase
 {
