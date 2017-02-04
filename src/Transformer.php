@@ -50,6 +50,8 @@ class Transformer
      */
     protected $ruleMethods = [];
 
+    protected $loadedRulePacks = [];
+
     /**
      * Transformer constructor.
      *
@@ -64,12 +66,12 @@ class Transformer
     /**
      * Perform the transformation
      *
-     * @param null $data
-     * @param null $rules
+     * @param array $data
+     * @param array $rules
      *
      * @return Collection
      */
-    public function transform($data = null, $rules = null): Collection
+    public function transform(array $data = null, array $rules = null): Collection
     {
         if ($data) {
             $this->setData($data);
@@ -220,6 +222,8 @@ class Transformer
     }
 
     /**
+     * Checks if the given rule exists.
+     *
      * @param $rule
      *
      * @return mixed
@@ -241,7 +245,6 @@ class Transformer
     /**
      * @param $rule
      * @return string
-     * @throws InvalidRuleException
      */
     protected function getRuleMethod($rule)
     {
@@ -255,7 +258,7 @@ class Transformer
      *
      * @return array
      */
-    protected function findMatchingFields($fieldExpression)
+    protected function findMatchingFields($fieldExpression): array
     {
         $matches = [];
         $regex = str_replace(['.', '*'], ['\.', '[^\\.|]+'], $fieldExpression);
@@ -268,9 +271,9 @@ class Transformer
     /**
      * @param      $key
      * @param null $closure
-     * @return $this
+     * @return self
      */
-    public function addRuleMethod($key, $closure = null)
+    public function addRuleMethod($key, $closure = null): self
     {
         if ( ! is_array($key)) {
             $this->ruleMethods[$key] = \Closure::bind($closure, $this, $this);
@@ -288,23 +291,35 @@ class Transformer
 
     /**
      * @param LoadableRulePack $rulePack
-     * @return Transformer
+     * @return self
      */
-    public function addRulePack(LoadableRulePack $rulePack)
+    public function addRulePack(LoadableRulePack $rulePack): self
     {
+        $this->loadedRulePacks[] = get_class($rulePack);
+
         return $rulePack->loadTo($this);
     }
 
     /**
      * @param array $rulePacks
-     * @return $this
+     * @return self
      */
-    public function addRulePacks(array $rulePacks)
+    public function addRulePacks(array $rulePacks): self
     {
         foreach ($rulePacks as $rulePack) {
             $this->addRulePack(new $rulePack);
         }
 
         return $this;
+    }
+
+    /**
+     * Return an array of all loaded rule packs.
+     *
+     * @return array
+     */
+    public function rulePacks(): array
+    {
+        return $this->loadedRulePacks;
     }
 }
