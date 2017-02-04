@@ -1,8 +1,8 @@
 <?php
 
-namespace Konsulting\Transformer\RulePacks;
+namespace Konsulting\Laravel\Transformer\RulePacks;
 
-use Konsulting\Transformer\Transformer;
+use Konsulting\Laravel\Transformer\Transformer;
 
 abstract class LoadableRulePack
 {

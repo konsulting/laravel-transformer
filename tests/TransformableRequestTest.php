@@ -1,6 +1,6 @@
 <?php
 
-namespace Konsulting\Transformer;
+namespace Konsulting\Laravel\Transformer;
 
 class TransformableRequestTest extends \PHPUnit_Framework_TestCase
 {

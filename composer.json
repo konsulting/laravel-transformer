@@ -1,5 +1,5 @@
 {
-    "name": "konsulting/transformer",
+    "name": "konsulting/laravel-transformer",
     "description": "A simple way to transform data, with helpers for transforming data in Laravel requests.",
     "license": "MIT",
     "authors": [
@@ -17,13 +17,13 @@
         "konsulting/laravel-extend-collections": "dev-master"
     },
     "require-dev": {
-        "phpunit/phpunit": "^5.6",
+        "phpunit/phpunit": "^7.0",
         "tightenco/collect": "^5.3",
         "nesbot/carbon": "^1.22"
     },
     "autoload": {
         "psr-4": {
-            "Konsulting\\Transformer\\": "src/"
+            "Konsulting\\Laravel\\Transformer\\": "src/"
         }
     },
     "autoload-dev": {
@@ -32,7 +32,7 @@
     "repositories": [
         {
             "type":"vcs",
-            "url":"/Users/robin/Code/laravel-extend-collections"
+            "url":"git@bitbucket.org:konsulting/laravel-extend-collections"
         }
     ]
 }

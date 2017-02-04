@@ -1,12 +1,9 @@
 <?php
 
-namespace Konsulting\Transformer;
+namespace Konsulting\Laravel\Transformer;
 
-use Carbon\Carbon;
-use Konsulting\Transformer\RulePacks\CarbonRulePack;
-use Konsulting\Transformer\RulePacks\CoreRulePack;
-use Konsulting\Transformer\RulePacks\LoadableRulePack;
-use Mockery;
+use Konsulting\Laravel\Transformer\RulePacks\CoreRulePack;
+use Konsulting\Laravel\Transformer\RulePacks\CarbonRulePack;
 
 class TransformerTest extends \PHPUnit_Framework_TestCase
 {
@@ -98,35 +95,5 @@ class TransformerTest extends \PHPUnit_Framework_TestCase
     function it_loads_rules_from_a_rule_pack_class()
     {
         $this->transformer->addRulePack(new CarbonRulePack);
-    }
-
-    /** @test */
-    function it_returns_an_array_of_loaded_rule_packs() {
-        $transformer = (new Transformer())
-            ->addRulePack(new rulePackOne)
-            ->addRulePack(new rulePackTwo);
-
-        $loadedRulePacks = [
-            'Konsulting\Transformer\rulePackOne',
-            'Konsulting\Transformer\rulePackTwo'
-            ];
-
-        $this->assertEquals($loadedRulePacks, $transformer->rulePacks());
-    }
-}
-
-class rulePackOne extends LoadableRulePack
-{
-    public function rules(): array
-    {
-        return [];
-    }
-}
-
-class rulePackTwo extends LoadableRulePack
-{
-    public function rules(): array
-    {
-        return [];
     }
 }

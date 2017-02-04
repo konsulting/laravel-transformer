@@ -1,21 +1,41 @@
 <?php
 
-namespace Konsulting\Transformer\Providers;
+namespace Konsulting\Laravel\Transformer\Providers;
 
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
-use Konsulting\Transformer\RulePacks\CarbonRulePack;
-use Konsulting\Transformer\RulePacks\CoreRulePack;
-use Konsulting\Transformer\Transformer;
-
+use Konsulting\Laravel\Transformer\Transformer;
+use Konsulting\Laravel\CollectionServiceProvider;
+use Konsulting\Laravel\Transformer\RulePacks\CoreRulePack;
+use Konsulting\Laravel\Transformer\RulePacks\CarbonRulePack;
 
 class TransformerServiceProvider extends ServiceProvider
 {
     /**
      * Register the application services.
-     *
-     * @return void
      */
-    public function register() : void
+    public function register()
+    {
+        $this->registerCollectionExtensionsIfMissing();
+        $this->registerTransformer();
+    }
+
+    /**
+     * If the developer has not explicitly loaded the extensions from
+     * the Konsulting Collection Extensions, we will load them up.
+     */
+    public function registerCollectionExtensionsIfMissing()
+    {
+        if (! Arr::hasMacro('fromDot') || ! Collection::hasMacro('fromDot')) {
+            (new CollectionServiceProvider)->register();
+        }
+    }
+
+    /**
+     * Register the Transformer singleton
+     */
+    public function registerTransformer()
     {
         $this->app->singleton(Transformer::class, function ($app) : Transformer {
             return (new Transformer())
@@ -28,7 +48,7 @@ class TransformerServiceProvider extends ServiceProvider
      *
      * @return array
      */
-    public function rulePacks() : array
+    public function rulePacks()
     {
         return [
             CoreRulePack::class,
