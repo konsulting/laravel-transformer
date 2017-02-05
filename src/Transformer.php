@@ -32,11 +32,11 @@ class Transformer
     protected $rules = [];
 
     /**
-     * An array of parsed rules.
+     * An array of expanded rules by field.
      *
      * @var array
      */
-    protected $parsedRules = [];
+    protected $expandedRules = [];
 
     /**
      * Flag indicating that rule processing should be halted.
@@ -78,7 +78,9 @@ class Transformer
      */
     public function setRules(array $rules = []) : self
     {
-        $this->rules = $rules;
+        foreach($rules as $fieldExpression => $ruleSet) {
+            $this->rules[$fieldExpression] = $this->parseRuleSet($ruleSet);
+        }
 
         return $this;
     }
@@ -116,19 +118,21 @@ class Transformer
             $this->setRules($rules);
         }
 
-        $this->parseRules()->applyRules();
+        $this->applyRules();
 
         return $this->data->fromDot();
     }
 
     /**
-     * Apply the parsed rules to the input
+     * Apply the expanded rules to the input
      *
      * @return self
      */
     protected function applyRules() : self
     {
-        foreach (array_keys($this->parsedRules) as $field) {
+        $this->expandRulesByField();
+
+        foreach (array_keys($this->expandedRules) as $field) {
             $this->executeRules($field);
         }
 
@@ -144,7 +148,7 @@ class Transformer
     {
         $this->bail(false);
 
-        foreach ($this->parsedRules[$field] as $rule => $parameters) {
+        foreach ($this->expandedRules[$field] as $rule => $parameters) {
             $ruleMethod = $this->getRuleMethod($rule);
 
             $result = $this->{$ruleMethod}($this->data->fromDot($field)->first(), ...$parameters);
@@ -182,14 +186,13 @@ class Transformer
      *
      * @return self
      */
-    protected function parseRules() : self
+    protected function expandRulesByField() : self
     {
         foreach ($this->rules as $fieldExpression => $ruleSet) {
-            $parsedRules = array_fill_keys(
+            $this->expandedRules = array_merge_recursive($this->expandedRules, array_fill_keys(
                 $this->findMatchingFields($fieldExpression),
-                $this->parseRuleSet($ruleSet)
-            );
-            $this->parsedRules = array_merge_recursive($this->parsedRules, $parsedRules);
+                $ruleSet
+            ));
         }
 
         return $this;
