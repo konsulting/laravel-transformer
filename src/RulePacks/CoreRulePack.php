@@ -2,79 +2,143 @@
 
 namespace Konsulting\Laravel\Transformer\RulePacks;
 
-class CoreRulePack extends LoadableRulePack
+use Illuminate\Support\Collection;
+
+class CoreRulePack extends RulePack
 {
     /**
-     * Return an array of closures containing the rules to load.
+     * Convert empty values to null.
      *
-     * @return array
+     * @param mixed $value
+     * @return mixed
      */
-    public function rules(): array
+    public function ruleNullIfEmpty($value) {
+        return empty($value) ? null : $value;
+    }
+
+    /**
+     * Stop processing rules if null.
+     *
+     * @param $value
+     * @return mixed
+     */
+    public function ruleBailIfNull($value) {
+        $this->transformer->bail(is_null($value));
+
+        return $value;
+    }
+
+    /**
+     * Return null if empty, and stop processing rules.
+     *
+     * @param $value
+     * @return null
+     */
+    public function ruleReturnNullIfEmpty($value) {
+        return $this->ruleBailIfNull($this->ruleNullIfEmpty($value));
+    }
+
+    /**
+     * Trim surrounding whitespace.
+     *
+     * @param        $value
+     * @param string $trim
+     *
+     * @return string
+     */
+    public function ruleTrim($value, $trim = ' ') {
+        return is_string($value) ? trim($value, $trim) : $value;
+    }
+
+    /**
+     * @param $value
+     * @return string
+     */
+    public function ruleUppercase($value) {
+        return strtoupper($value);
+    }
+
+    /**
+     * @param $value
+     * @return string
+     */
+    public function ruleLowercase($value) {
+        return strtolower($value);
+    }
+
+    public function ruleString($value)
     {
-        return [
-            /**
-             * Return null if $value is empty.
-             *
-             * @param mixed $value
-             * @return mixed
-             */
-            'ruleNullIfEmpty'       => function ($value) {
-                return isEmpty($value) ? null : $value;
-            },
+        try {
+            return is_array($value) ? str_getcsv($value): (string) $value;
+        } catch (\Exception $e) {
+            return '';
+        }
+    }
 
-            /**
-             * Set bail flag if null.
-             *
-             * @param $value
-             * @return mixed
-             */
-            'ruleBailIfNull'        => function ($value) {
-                $this->bail = is_null($value);
+    public function ruleBoolean($value)
+    {
+        return (bool) $value;
+    }
 
-                return $value;
-            },
+    public function ruleArray($value)
+    {
+        return (array) $value;
+    }
 
-            /**
-             * @param $value
-             * @return null
-             */
-            'ruleReturnNullIfEmpty' => function ($value) {
-                $value = isEmpty($value) ? null : $value;
+    public function ruleCollection($value)
+    {
+        return Collection::make($this->ruleArray($value));
+    }
 
-                $this->bail = is_null($value);
+    public function ruleJson($value)
+    {
+        return $this->ruleCollection($value)->toJson();
+    }
 
-                return $value;
-            },
+    public function ruleRegexReplace($value, $regex = '*', $replace = '')
+    {
+        return preg_replace('/' . preg_quote($regex, '/') . '/', $replace, $value);
+    }
 
-            /**
-             * Trim surrounding whitespace.
-             *
-             * @param $value
-             * @return string
-             */
-            'ruleTrim'              => function ($value) {
-                if ( ! is_string($value)) {
-                    return $value;
-                }
+    public function ruleFloat($value)
+    {
+        return (float) preg_replace('/[^\d,.]/', '', $value);
+    }
 
-                return trim($value);
-            },
+    public function ruleInteger($value)
+    {
+        return (int) $this->ruleFloat($value);
+    }
 
-            /**
-             * @param $value
-             * @return string
-             */
-            'ruleUppercase'         => function ($value) {
-                return strtoupper($value);
-            },
+    /*
+     * Return only numeric characters
+     */
+    public function ruleNumeric($value)
+    {
+        return preg_replace('/^[\pN]/u', '', $value);
+    }
 
-            /**
-             * @param $value
-             * @return string
-             */
-            'ruleLowercase'         => function ($value) {
-                return strtolower($value);
-            }
-        ];
+    /*
+     * Return only alphabetic characters
+     */
+    public function ruleAlpha($value)
+    {
+        return preg_replace('/^[\pL\pM]/u', '', $value);
+    }
+
+    /*
+     * Return only alphabetic and numeric characters
+     */
+    public function ruleAlphaNum($value)
+    {
+        return preg_replace('/^[\pL\pM\pN]/u', '', $value);
+    }
+
+    /*
+     * Return only alphabetic, numeric, underscore and dash characters
+     */
+    public function ruleAlphaNumDash($value)
+    {
+        return preg_replace('/^[\pL\pM\pN_-]/u', '', $value);
     }
 }

@@ -2,25 +2,25 @@
 
 namespace Konsulting\Laravel\Transformer\RulePacks;
 
-class KonsultingDatetimeRulePack extends LoadableRulePack {
-    public function rules() : array
+class KonsultingDatetimeRulePack extends RulePack
+{
+    public function ruleToPersistFormat($value, $type = 'datetime')
     {
-        return [
-            'ruleToPersistFormat' => function ($value, $type = 'datetime') {
-                return $this->ruleFormat($value, DateTimeFormats::persistenceFormat($type));
-            },
+        return $this->transformer->ruleFormat($value, DateTimeFormats::persistenceFormat($type));
+    }
 
-            'ruleToDisplayFormat' => function ($value, $type = 'datetime') {
-                return $this->ruleFormat($value, DateTimeFormats::displayFormat($type));
-            },
+    public function ruleToDisplayFormat($value, $type = 'datetime')
+    {
+        return $this->transformer->ruleFormat($value, DateTimeFormats::displayFormat($type));
+    }
 
-            'ruleFromDisplayFormat' => function ($value, $type = 'datetime') {
-                return $this->ruleToCarbon($value, DateTimeFormats::displayFormat($type));
-            },
+    public function ruleFromDisplayFormat($value, $type = 'datetime')
+    {
+        return $this->transformer->ruleToCarbon($value, DateTimeFormats::displayFormat($type));
+    }
 
-            'ruleCombine' => function ($value, $type = 'datetime') {
-                return DateTimeFormats::combine($value, DateTimeFormats::persistenceFormat($type));
-            },
-        ];
+    public function ruleCombine($value, $type = 'datetime')
+    {
+        return DateTimeFormats::combine($value, DateTimeFormats::persistenceFormat($type));
     }
 }

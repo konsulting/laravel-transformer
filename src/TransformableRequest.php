@@ -15,7 +15,7 @@ trait TransformableRequest
     /**
      * Get the transformed data and cache to prevent unnecessary processing.
      *
-     * @return Collection
+     * @return \Illuminate\Support\Collection
      */
     public function transformed()
     {

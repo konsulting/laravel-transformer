@@ -5,9 +5,9 @@ namespace Konsulting\Laravel\Transformer;
 trait TransformsData
 {
     /**
-     * @param \Illuminate\Support\Collection|array $data
-     * @param array                                $rules
-     * @return Collection
+     * @param  \Illuminate\Support\Collection|array $data
+     * @param  array                                $rules
+     * @return \Illuminate\Support\Collection
      */
     public function transform($data, $rules = null)
     {
@@ -27,7 +27,7 @@ trait TransformsData
     /**
      * Get the transformer for the application. Means it can be built up in a service provider if required.
      *
-     * @return \Illuminate\Foundation\Application|mixed
+     * @return Transformer
      */
     public function transformer()
     {
