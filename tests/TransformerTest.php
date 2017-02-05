@@ -55,6 +55,18 @@ class TransformerTest extends \PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    function it_applies_the_special_case_apply_to_everything_double_star_properly()
+    {
+        $this->assertEquals(
+            ['a' => ['ABC', ['name' => 'A', 'title' => 'MR'], ['name' => 'B']], 'b' => 'ABC'],
+            $this->transformer()->transform(
+                ['a' => ['abc', ['name' => 'a', 'title' => 'mr'], ['name' => 'b']], 'b' => 'abc'],
+                ['**' => 'uppercase']
+            )->toArray()
+        );
+    }
+
+    /** @test */
     function it_applies_a_rule_to_all_data_at_a_single_level()
     {
         $this->assertEquals(
@@ -74,6 +86,18 @@ class TransformerTest extends \PHPUnit_Framework_TestCase
             $this->transformer()->transform(
                 ['a' => [], 'b' => 'string'],
                 ['*' => 'return_null_if_empty|uppercase']
+            )->toArray()
+        );
+    }
+
+    /** @test */
+    function it_will_drop_a_field_from_the_data()
+    {
+        $this->assertEquals(
+            ['b' => 'STRING'],
+            $this->transformer()->transform(
+                ['a' => [], 'b' => 'string'],
+                ['*' => 'drop_if_empty|uppercase']
             )->toArray()
         );
     }

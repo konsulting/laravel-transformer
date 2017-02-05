@@ -24,7 +24,8 @@
     "autoload": {
         "psr-4": {
             "Konsulting\\Laravel\\Transformer\\": "src/"
-        }
+        },
+        "files": ["src/helpers.php"]
     },
     "autoload-dev": {
         "classmap": ["tests"]

@@ -46,6 +46,13 @@ class Transformer
     protected $bail;
 
     /**
+     * Flag indicating that rule processing should be halted and we should drop the current field.
+     *
+     * @var bool
+     */
+    protected $drop;
+
+    /**
      * Index of loaded RulePacks
      *
      * @var array
@@ -108,11 +115,9 @@ class Transformer
      *
      * @return Collection
      */
-    public function transform(array $data = null, array $rules = null): Collection
+    public function transform(array $data, array $rules = null): Collection
     {
-        if ($data) {
-            $this->setData($data);
-        }
+        $this->setData($data);
 
         if ($rules) {
             $this->setRules($rules);
@@ -147,11 +152,17 @@ class Transformer
     protected function executeRules($field)
     {
         $this->bail(false);
+        $this->drop(false);
 
         foreach ($this->matchedRules[$field] as $rule => $parameters) {
             $ruleMethod = $this->getRuleMethod($rule);
 
             $result = $this->{$ruleMethod}($this->data->fromDot($field)->first(), ...$parameters);
+
+            if ($this->shouldDrop()) {
+                $this->data->forget($field);
+                return;
+            }
 
             $this->data = $this->data->merge(Arr::dot(is_array($result) ? $result : [$field => $result]));
 
@@ -164,6 +175,11 @@ class Transformer
     public function bail(bool $bail = true)
     {
         $this->bail = $bail;
+    }
+
+    public function drop(bool $drop = true)
+    {
+        $this->drop = $drop;
     }
 
     /**
@@ -179,6 +195,11 @@ class Transformer
     protected function shouldBail() : bool
     {
         return $this->bail;
+    }
+
+    protected function shouldDrop() : bool
+    {
+        return $this->drop;
     }
 
     /**
@@ -207,6 +228,10 @@ class Transformer
      */
     protected function findMatchingFields($fieldExpression) : array
     {
+        if ($fieldExpression == '**') {
+            return explode('|', $this->dataKeysForRegex);
+        }
+
         $matches = [];
         $regex = str_replace(['.', '*'], ['\.', '[^\\.|]+'], $fieldExpression);
         preg_match_all("/({$regex})/", $this->dataKeysForRegex, $matches);

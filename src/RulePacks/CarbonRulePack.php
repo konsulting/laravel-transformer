@@ -6,11 +6,13 @@ use Carbon\Carbon;
 
 class CarbonRulePack extends RulePack
 {
-    public function ruleFormat($value, $format) {
-        return $this->transformer->ruleToCarbon($value)->format($format);
+    public function ruleDateFormat($value, $format = 'Y-m-d H:i:s', $fromFormat = null)
+    {
+        return $this->ruleCarbon($value, $fromFormat)->format($format);
     }
 
-    public function ruleToCarbon($value, $format = null) {
+    public function ruleCarbon($value, $format = null)
+    {
         if ($value instanceof Carbon) {
             return $value;
         }

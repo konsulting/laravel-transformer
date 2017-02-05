@@ -10,9 +10,11 @@ class CoreRulePack extends RulePack
      * Convert empty values to null.
      *
      * @param mixed $value
+     *
      * @return mixed
      */
-    public function ruleNullIfEmpty($value) {
+    public function ruleNullIfEmpty($value)
+    {
         return empty($value) ? null : $value;
     }
 
@@ -20,9 +22,11 @@ class CoreRulePack extends RulePack
      * Stop processing rules if null.
      *
      * @param $value
+     *
      * @return mixed
      */
-    public function ruleBailIfNull($value) {
+    public function ruleBailIfNull($value)
+    {
         $this->transformer->bail(is_null($value));
 
         return $value;
@@ -32,10 +36,40 @@ class CoreRulePack extends RulePack
      * Return null if empty, and stop processing rules.
      *
      * @param $value
+     *
      * @return null
      */
-    public function ruleReturnNullIfEmpty($value) {
+    public function ruleReturnNullIfEmpty($value)
+    {
         return $this->ruleBailIfNull($this->ruleNullIfEmpty($value));
+    }
+
+    /**
+     * Drop field if value is null.
+     *
+     * @param $value
+     *
+     * @return null
+     */
+    public function ruleDropIfNull($value)
+    {
+        $this->transformer->drop(is_null($value));
+
+        return $value;
+    }
+
+    /**
+     * Drop field if value equates to empty.
+     *
+     * @param $value
+     *
+     * @return null
+     */
+    public function ruleDropIfEmpty($value)
+    {
+        $this->transformer->drop(empty($value));
+
+        return $value;
     }
 
     /**
@@ -46,30 +80,35 @@ class CoreRulePack extends RulePack
      *
      * @return string
      */
-    public function ruleTrim($value, $trim = ' ') {
+    public function ruleTrim($value, $trim = ' ')
+    {
         return is_string($value) ? trim($value, $trim) : $value;
     }
 
     /**
      * @param $value
+     *
      * @return string
      */
-    public function ruleUppercase($value) {
-        return strtoupper($value);
+    public function ruleUppercase($value)
+    {
+        return strtoupper($this->ruleString($value));
     }
 
     /**
      * @param $value
+     *
      * @return string
      */
-    public function ruleLowercase($value) {
-        return strtolower($value);
+    public function ruleLowercase($value)
+    {
+        return strtolower($this->ruleString($value));
     }
 
     public function ruleString($value)
     {
         try {
-            return is_array($value) ? str_getcsv($value): (string) $value;
+            return is_array($value) ? str_putcsv($value) : (string)$value;
         } catch (\Exception $e) {
             return '';
         }
@@ -95,11 +134,6 @@ class CoreRulePack extends RulePack
         return $this->ruleCollection($value)->toJson();
     }
 
-    public function ruleRegexReplace($value, $regex = '*', $replace = '')
-    {
-        return preg_replace('/' . preg_quote($regex, '/') . '/', $replace, $value);
-    }
-
     public function ruleFloat($value)
     {
         return (float) preg_replace('/[^\d,.]/', '', $value);
@@ -108,6 +142,21 @@ class CoreRulePack extends RulePack
     public function ruleInteger($value)
     {
         return (int) $this->ruleFloat($value);
+    }
+
+    public function ruleDateTime($value, $timezone = null)
+    {
+        return new \DateTime($value, $timezone);
+    }
+
+    public function ruleDateTimeImmutable($value, $timezone = null)
+    {
+        return new \DateTimeImmutable($value, $timezone);
+    }
+
+    public function ruleRegexReplace($value, $regex = '*', $replace = '')
+    {
+        return preg_replace('/' . preg_quote($regex, '/') . '/', $replace, $value);
     }
 
     /*
