@@ -115,7 +115,7 @@ class CoreRulePack extends RulePack
      */
     public function ruleNumeric($value)
     {
-        return preg_replace('/^[\pN]/u', '', $value);
+        return preg_replace('/[^\pN]/u', '', $value);
     }
 
     /*
@@ -123,7 +123,15 @@ class CoreRulePack extends RulePack
      */
     public function ruleAlpha($value)
     {
-        return preg_replace('/^[\pL\pM]/u', '', $value);
+        return preg_replace('/[^\pL\pM\s]/u', '', $value);
+    }
+
+    /*
+     * Return only alphabetic characters, underscore or dash
+     */
+    public function ruleAlphaDash($value)
+    {
+        return preg_replace('/[^\pL\pM\s_-]/u', '', $value);
     }
 
     /*
@@ -131,7 +139,7 @@ class CoreRulePack extends RulePack
      */
     public function ruleAlphaNum($value)
     {
-        return preg_replace('/^[\pL\pM\pN]/u', '', $value);
+        return preg_replace('/[^\pL\pM\pN\s]/u', '', $value);
     }
 
     /*
@@ -139,6 +147,6 @@ class CoreRulePack extends RulePack
      */
     public function ruleAlphaNumDash($value)
     {
-        return preg_replace('/^[\pL\pM\pN_-]/u', '', $value);
+        return preg_replace('/[^\pL\pM\pN\s_-]/u', '', $value);
     }
 }

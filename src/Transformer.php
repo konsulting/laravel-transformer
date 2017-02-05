@@ -101,12 +101,12 @@ class Transformer
     /**
      * Perform the transformation
      *
-     * @param null $data
-     * @param null $rules
+     * @param array $data
+     * @param array $rules
      *
      * @return Collection
      */
-    public function transform($data = null, $rules = null) : Collection
+    public function transform(array $data = null, array $rules = null): Collection
     {
         if ($data) {
             $this->setData($data);
@@ -327,5 +327,15 @@ class Transformer
         $rulePackClass = is_object($rulePack) ? get_class($rulePack) : $rulePack;
 
         return in_array($rulePackClass, array_keys($this->rulePacks));
+    }
+
+    /**
+     * Return an array of all loaded rule packs.
+     *
+     * @return array
+     */
+    public function rulePacks(): array
+    {
+        return $this->loadedRulePacks;
     }
 }
