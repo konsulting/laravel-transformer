@@ -11,7 +11,7 @@ class CoreRulePackTest extends \PHPUnit_Framework_TestCase
 
     function setUp()
     {
-        $this->transformer = (new Transformer())->addRulePack(CoreRulePack::class);
+        $this->transformer = new Transformer(CoreRulePack::class);
     }
 
     /** @test */

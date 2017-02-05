@@ -61,12 +61,12 @@ class Transformer
     /**
      * Transformer constructor.
      *
-     * @param array $data
-     * @param array $rules
+     * @param  array|string $rulePacks
+     * @param  array        $rules
      */
-    public function __construct(array $data = [], array $rules = [])
+    public function __construct($rulePacks = [], $rules = [])
     {
-        $this->setData($data)->setRules($rules);
+        $this->addRulePacks((array) $rulePacks)->setRules($rules);
     }
 
     /**

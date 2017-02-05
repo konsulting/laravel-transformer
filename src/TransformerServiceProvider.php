@@ -46,7 +46,7 @@ class TransformerServiceProvider extends ServiceProvider
     public function registerTransformer()
     {
         $this->app->singleton(Transformer::class, function () {
-            return (new Transformer())->addRulePacks(config('transformer.rule_packs', []));
+            return new Transformer(config('transformer.rule_packs', []));
         });
     }
 }

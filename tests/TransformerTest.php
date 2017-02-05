@@ -92,6 +92,6 @@ class TransformerTest extends \PHPUnit_Framework_TestCase
 
     public function transformer()
     {
-        return (new Transformer)->addRulePack(new CoreRulePack);
+        return new Transformer(CoreRulePack::class);
     }
 }

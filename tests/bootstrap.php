@@ -1,5 +1,8 @@
 <?php
 
+use Konsulting\Laravel\Transformer\Transformer;
+use Konsulting\Laravel\Transformer\RulePacks\CoreRulePack;
+
 require __DIR__ . '/../vendor/autoload.php';
 
 require __DIR__ . '/../vendor/konsulting/laravel-extend-collections/src/arr_macros.php';
@@ -8,6 +11,5 @@ require __DIR__ . '/../vendor/konsulting/laravel-extend-collections/src/collecti
 // Dummy the Laravel function for locating things in the container, for testing purposes
 function app($dummy)
 {
-    return (new Konsulting\Laravel\Transformer\Transformer)
-        ->addRulePack(new \Konsulting\Laravel\Transformer\RulePacks\CoreRulePack);
+    return new Transformer(CoreRulePack::class);
 }
