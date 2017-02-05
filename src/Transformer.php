@@ -32,11 +32,11 @@ class Transformer
     protected $rules = [];
 
     /**
-     * An array of expanded rules by field.
+     * An array of rules matched to fields, used during transform only.
      *
      * @var array
      */
-    protected $expandedRules = [];
+    protected $matchedRules = [];
 
     /**
      * Flag indicating that rule processing should be halted.
@@ -124,15 +124,15 @@ class Transformer
     }
 
     /**
-     * Apply the expanded rules to the input
+     * Apply the matched rules to the input
      *
      * @return self
      */
     protected function applyRules() : self
     {
-        $this->expandRulesByField();
+        $this->matchRulesToFields();
 
-        foreach (array_keys($this->expandedRules) as $field) {
+        foreach (array_keys($this->matchedRules) as $field) {
             $this->executeRules($field);
         }
 
@@ -148,7 +148,7 @@ class Transformer
     {
         $this->bail(false);
 
-        foreach ($this->expandedRules[$field] as $rule => $parameters) {
+        foreach ($this->matchedRules[$field] as $rule => $parameters) {
             $ruleMethod = $this->getRuleMethod($rule);
 
             $result = $this->{$ruleMethod}($this->data->fromDot($field)->first(), ...$parameters);
@@ -182,14 +182,14 @@ class Transformer
     }
 
     /**
-     * Parse rules given an array of rules [field1 => [rule1|rule2, field2 => [rule1|rule2]]
+     * Match the loaded rule to fields in the data, based on the $field expression provided.
      *
      * @return self
      */
-    protected function expandRulesByField() : self
+    protected function matchRulesToFields() : self
     {
         foreach ($this->rules as $fieldExpression => $ruleSet) {
-            $this->expandedRules = array_merge_recursive($this->expandedRules, array_fill_keys(
+            $this->matchedRules = array_merge_recursive($this->matchedRules, array_fill_keys(
                 $this->findMatchingFields($fieldExpression),
                 $ruleSet
             ));
