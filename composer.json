@@ -14,7 +14,7 @@
     ],
     "require": {
         "php": "^7.0",
-        "konsulting/laravel-extend-collections": "dev-master"
+        "konsulting/laravel-extend-collections": "^0.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.6",
@@ -30,11 +30,5 @@
     },
     "autoload-dev": {
         "classmap": ["tests"]
-    },
-    "repositories": [
-        {
-            "type":"vcs",
-            "url":"git@bitbucket.org:konsulting/laravel-extend-collections"
-        }
-    ]
+    }
 }
