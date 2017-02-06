@@ -104,39 +104,39 @@ We provide a couple of rule packs for use, it is easy to extend the rules availa
 #### Core Rule Pack
 
 ##### Cleaning up
-`null_if_empty`
-`return_null_if_empty`
-`bail_if_null`
-`drop_if_null`
-`drop_if_empty`
-`trim` - optional parameter of char to trim.
+* `null_if_empty`
+* `return_null_if_empty`
+* `bail_if_null`
+* `drop_if_null`
+* `drop_if_empty`
+* `trim` - optional parameter of char to trim.
 
 ##### Casting
-`string` - convert to string, an array is transformed to a CSV or returns ‘’ for items that cannot be represented as a string
-`boolean` 
-`array` 
-`collection` - convert to `Illuminate\Support\Collection`
-`json` 
-`float` 
-`integer`
-`date_time` - optional timezone parameter
-`date_time_immutable` - optional timezone parameter
+* `string` - convert to string, an array is transformed to a CSV or returns ‘’ for items that cannot be represented as a string
+* `boolean` 
+* `array` 
+* `collection` - convert to `Illuminate\Support\Collection`
+* `json` 
+* `float` 
+* `integer`
+* `date_time` - optional timezone parameter
+* `date_time_immutable` - optional timezone parameter
 
 ##### String manipulation
-`uppercase`
-`lowercase`
+* `uppercase`
+* `lowercase`
 
 #####  Regex
-`regex_replace`
-`numeric`
-`alpha`
-`alpha_dash`
-`alpha_num`
-`alpha_num_dash`
+* `regex_replace`
+* `numeric`
+* `alpha`
+* `alpha_dash`
+* `alpha_num`
+* `alpha_num_dash`
 
 #### Carbon Rule Pack
-`carbon`
-`date_format` - parameter for the format required
+* `carbon`
+* `date_format` - parameter for the format required
 
 ### Laravel Helpers
 We use Laravel frequently, so have a couple of extras added here.
