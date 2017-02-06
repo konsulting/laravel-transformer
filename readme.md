@@ -274,6 +274,6 @@ Please:
 * Document changes in behaviour, including readme.md.
 
 ## Testing
-We use [PHPUnit](https://phpunit.de)
+We use [PHPUnit](https://phpunit.de) and the excellent [orchestral/testbench](https://github.com/orchestral/testbench) 
 
 Run tests using PHPUnit: `vendor/bin/phpunit`

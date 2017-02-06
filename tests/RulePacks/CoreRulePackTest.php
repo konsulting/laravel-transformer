@@ -44,8 +44,8 @@ class CoreRulePackTest extends \PlainPhpTestCase
     }
 
     /** @test **/
-    public function the_drop_null_if_empty_string_works()
+    public function the_drop_if_empty_string_works()
     {
-        $this->assertEquals([], $this->transformer->transform(['a' => ''], ['a' => '_drop_if_empty_string'])->toArray());
+        $this->assertEquals([], $this->transformer->transform(['a' => ''], ['a' => 'drop_if_empty_string'])->toArray());
     }
 }
