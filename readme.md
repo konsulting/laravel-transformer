@@ -29,7 +29,7 @@ The extensions are available in the `konsulting/laravel-extend-collections` pack
 ```
 
 * Optionally publish the config file, and adjust the rule packs you want to use. 
-`php artisan vendor:publish --provider=\\Konsulting\\Laravel\\TransformerServiceProvider --tag=config`
+`php artisan vendor:publish --provider=Konsulting\\Laravel\\Transformer\\TransformerServiceProvider --tag=config`
 
 ### Transformer outside a Laravel application
 * Transformer uses `Illuminate\Support\Collection` and `Illuminate\Support\Arr`. Outside a Laravel application, 
