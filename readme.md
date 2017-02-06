@@ -14,7 +14,7 @@ The extensions are available in the `konsulting/laravel-extend-collections` pack
     // Other service providers...
     
     Konsulting\Laravel\CollectionsServiceProvider::class,
-    Konsulting\Laravel\TransformerServiceProvider::class,
+    Konsulting\Laravel\Transformer\TransformerServiceProvider::class,
 ],	
 ```
 
@@ -24,7 +24,7 @@ The extensions are available in the `konsulting/laravel-extend-collections` pack
 'aliases' => [
     // Other aliases...
 
-    'Transformer' => Konsulting\Laravel\TransformerFacade::class,
+    'Transformer' => Konsulting\Laravel\Transformer\TransformerFacade::class,
 ],
 ```
 
