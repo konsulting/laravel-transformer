@@ -61,6 +61,7 @@ class Transformer
 
     /**
      * Index of transformation rules, linking to their parent RulePack
+     *
      * @var array
      */
     protected $ruleMethods = [];
@@ -73,7 +74,7 @@ class Transformer
      */
     public function __construct($rulePacks = [], $rules = [])
     {
-        $this->addRulePacks((array) $rulePacks)->setRules($rules);
+        $this->addRulePacks((array)$rulePacks)->setRules($rules);
     }
 
     /**
@@ -83,9 +84,9 @@ class Transformer
      *
      * @return self
      */
-    public function setRules(array $rules = []) : self
+    public function setRules(array $rules = []): self
     {
-        foreach($rules as $fieldExpression => $ruleSet) {
+        foreach ($rules as $fieldExpression => $ruleSet) {
             $this->rules[$fieldExpression] = $this->parseRuleSet($ruleSet);
         }
 
@@ -99,7 +100,7 @@ class Transformer
      *
      * @return self
      */
-    public function setData(array $data = []) : self
+    public function setData(array $data = []): self
     {
         $this->data = Collection::make($data)->dot();
         $this->dataKeysForRegex = $this->data->keys()->implode('|');
@@ -133,7 +134,7 @@ class Transformer
      *
      * @return self
      */
-    protected function applyRules() : self
+    protected function applyRules(): self
     {
         $this->matchRulesToFields();
 
@@ -161,6 +162,7 @@ class Transformer
 
             if ($this->shouldDrop()) {
                 $this->data->forget($field);
+
                 return;
             }
 
@@ -187,17 +189,17 @@ class Transformer
      * @return string
      * @throws InvalidRule
      */
-    protected function getRuleMethod($rule) : string
+    protected function getRuleMethod($rule): string
     {
         return 'rule' . str_replace('_', '', ucwords($rule, '_'));
     }
 
-    protected function shouldBail() : bool
+    protected function shouldBail(): bool
     {
         return $this->bail;
     }
 
-    protected function shouldDrop() : bool
+    protected function shouldDrop(): bool
     {
         return $this->drop;
     }
@@ -207,7 +209,7 @@ class Transformer
      *
      * @return self
      */
-    protected function matchRulesToFields() : self
+    protected function matchRulesToFields(): self
     {
         foreach ($this->rules as $fieldExpression => $ruleSet) {
             $this->matchedRules = array_merge_recursive($this->matchedRules, array_fill_keys(
@@ -226,7 +228,7 @@ class Transformer
      *
      * @return array
      */
-    protected function findMatchingFields($fieldExpression) : array
+    protected function findMatchingFields($fieldExpression): array
     {
         if ($fieldExpression == '**') {
             return explode('|', $this->dataKeysForRegex);
@@ -246,7 +248,7 @@ class Transformer
      *
      * @return array
      */
-    protected function parseRuleSet($set) : array
+    protected function parseRuleSet($set): array
     {
         $ruleSet = [];
 
@@ -263,7 +265,7 @@ class Transformer
      * @return mixed
      * @throws UnexpectedValue
      */
-    protected function parseRuleExpression($expression) : array
+    protected function parseRuleExpression($expression): array
     {
         $split = [];
 
@@ -283,9 +285,9 @@ class Transformer
      * @return string
      * @throws InvalidRule
      */
-    protected function validateRule($rule) : string
+    protected function validateRule($rule): string
     {
-        if (! isset($this->ruleMethods[$this->getRuleMethod($rule)])) {
+        if ( ! isset($this->ruleMethods[$this->getRuleMethod($rule)])) {
             throw new InvalidRule($rule);
         }
 
@@ -312,7 +314,7 @@ class Transformer
      *
      * @return Transformer
      */
-    public function addRulePacks(array $rulePacks) : self
+    public function addRulePacks(array $rulePacks): self
     {
         foreach ($rulePacks as $rulePack) {
             $this->addRulePack(new $rulePack);
@@ -326,16 +328,16 @@ class Transformer
      *
      * @return Transformer
      */
-    public function addRulePack($rulePack) : self
+    public function addRulePack($rulePack): self
     {
-        $rulePackClass = is_string($rulePack) ? $rulePack : get_class($rulePack);
-        $rulePack = is_string($rulePack) ? new $rulePack : $rulePack;
+        $rulePackClass = $this->getClassName($rulePack);
+        $rulePack = new $rulePackClass;
 
-        if (! ($rulePack instanceof RulePack)) {
+        if ( ! ($rulePack instanceof RulePack)) {
             throw new \UnexpectedValueException('RulePack must be an instance of ' . RulePack::class);
         }
 
-        if (! $this->hasRulePack($rulePack)) {
+        if ( ! $this->hasRulePack($rulePack)) {
             $this->rulePacks[$rulePackClass] = $rulePack->transformer($this);
 
             $ruleMethods = array_fill_keys($rulePack->provides(), $rulePackClass);
@@ -350,9 +352,9 @@ class Transformer
      *
      * @return bool
      */
-    public function hasRulePack($rulePack) : bool
+    public function hasRulePack($rulePack): bool
     {
-        $rulePackClass = is_object($rulePack) ? get_class($rulePack) : $rulePack;
+        $rulePackClass = $this->getClassName($rulePack);
 
         return in_array($rulePackClass, array_keys($this->rulePacks));
     }
@@ -364,6 +366,17 @@ class Transformer
      */
     public function rulePacks(): array
     {
-        return $this->loadedRulePacks;
+        return array_keys($this->rulePacks);
+    }
+
+    /**
+     * Return class name if input is object, otherwise return input.
+     *
+     * @param string|object $class
+     * @return string
+     */
+    protected function getClassName($class): string
+    {
+        return is_string($class) ? $class : get_class($class);
     }
 }

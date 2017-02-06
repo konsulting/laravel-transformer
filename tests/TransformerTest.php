@@ -3,6 +3,7 @@
 namespace Konsulting\Laravel\Transformer;
 
 use Konsulting\Laravel\Transformer\RulePacks\CoreRulePack;
+use Konsulting\Laravel\Transformer\RulePacks\RulePack;
 
 class TransformerTest extends \PlainPhpTestCase
 {
@@ -118,4 +119,23 @@ class TransformerTest extends \PlainPhpTestCase
     {
         return new Transformer(CoreRulePack::class);
     }
+
+    /** @test */
+    function it_returns_an_array_of_loaded_rule_packs()
+    {
+        $rulePacks = [rulePackOne::class, rulePackTwo::class];
+
+        $transformer = new Transformer($rulePacks);
+
+        $this->assertEquals($rulePacks, $transformer->rulePacks());
+    }
+}
+
+
+class rulePackOne extends RulePack
+{
+}
+
+class rulePackTwo extends RulePack
+{
 }

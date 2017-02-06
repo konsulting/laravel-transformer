@@ -24,7 +24,7 @@ The extensions are available in the `konsulting/laravel-extend-collections` pack
 'aliases' => [
     // Other aliases...
 
-    'Butler' => Konsulting\Laravel\TransformerFacade::class,
+    'Transformer' => Konsulting\Laravel\TransformerFacade::class,
 ],
 ```
 
@@ -230,6 +230,36 @@ class ContactRequestsController
     }
 }
 ```
+
+### Middleware
+The `TransformRequest` middleware applies transformations to requests according to configured rules. These rules are specified in the `middleware_rules` key of the config file as detailed in [Usage](#usage).
+
+To register the middleware for use in your project, add the following line to your project's `App/Http/Kernel.php`:
+
+```php
+'transform_data' => \Konsulting\Laravel\Transformer\Middleware\TransformRequest::class
+```
+
+The default middleware rules state that every field should be trimmed of whitespace and nulled if empty:
+
+```php
+'middleware_rules' => [
+    '**' => 'trim|return_null_if_empty',
+]
+```
+
+Rules need not be applied to all fields; specific fields may be targeted within the middleware if required:
+
+```php
+'middleware_rules' => [
+    'postcode'  => 'uppercase',
+    'email'     => 'lowercase',
+]
+```
+
+With the above configuration, the postcode and email fields of every request sent through the middleware will be affected, but all other fields will be left unchanged.
+
+Multiple transformer middlewares may be useful in a project: to achieve this, copy `laravel-transformer/src/Middleware/TransformRequest.php` to your project's `App/Http/Middleware` directory, and rename/edit as necessary. Each new middleware will have to be registered in the kernel.
 
 ## Contributing
 Contributions are welcome and will be fully credited. We will accept contributions by Pull Request. 
