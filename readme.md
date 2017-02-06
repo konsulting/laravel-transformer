@@ -147,21 +147,91 @@ Use the facade to gain easy access to the Transformer wherever you are.
 \Transformer::transform($data, $rules);
 ```
 
-#### TransformsData Trait
-This trait can be used to set up easy access to the Transformer in and object, and provides a simple place to store the rules.
-Simply `use \Konsulting\Laravel\Transformer\TransformsData` , place the rules in an override of the `transformRules` method, and then you can `transform` data when needed.
+#### Request Macro `transform`
+The Service Provider adds the transform Macro to the `Illuminate\Http\Request` class. This makes it simple to invoke the transformation on a request at any point. The method passes the request object back to allow chaining.
 
-#### TransformableRequest Trait
-This trait is intended to sit as an extension to an Illuminate Form Request. `use Konsulting\Laravel\Transformer\TransformableRequest` and after overriding the `transformRules` method to provide the rule array, you can access transformed request data through the `transformed()` method. It also provides the transformed data to the validation logic in the form request.
-Unconventionally, this trait also uses the `TransformsData` trait to reuse the code.
+~Using the Request::transform($rules) Macro~
+```php
+// Example Controller
 
+namespace App\Http\Controllers;
+
+use App\ContactRequest;
+use Illuminate\Http\Request;
+
+class ContactRequestsController
+{
+    // ...
+
+    public function store(Request $request)
+    {
+        $request->transform([
+            'name' => 'trim|uppercase',
+            'message' => 'trim',
+        ]);
+
+        $this->validate($request, [ 
+            'name' => 'required',
+        ]);
+
+        return ContactRequest::create(
+            $request->only('name', 'message')
+        );
+    }
+}
+```
+
+#### TransformingRequest Trait
+This trait makes the form request transform the data before validation occurs (which is upon it being resolved by the container).
+
+Rules for transformation are provided in the `transformRules` method.
+
+~Using the TransformingRequest Trait~
+```php
+// Form Request
+
+namespace App\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+use Konsulting\Laravel\Transformer\TransformableRequest;
+
+class ContactFormRequest extends FormRequest
+{
+    use TransformableRequest;
+
+	  // ... other methods including rules()
+	
+	  public function transformRules()
+    {
+        return [
+            'name' => 'trim|uppercase',
+            'message' => 'trim',
+        ];
+    }
+```
 
 ```php
+// Controller
 
+namespace App\Http\Controllers;
+
+use App\ContactRequest;
+use App\Http\Requests\ContactFormRequests;
+
+class ContactRequestsController
+{
+    // ...
+
+    public function store(ContactFormRequest $request)
+    {
+        return ContactRequest::create(
+            $request->only('name', 'message')
+        );
+    }
+}
 ```
 
 ## Contributing
-
 Contributions are welcome and will be fully credited. We will accept contributions by Pull Request. 
 
 Please:

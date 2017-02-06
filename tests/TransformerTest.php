@@ -4,7 +4,7 @@ namespace Konsulting\Laravel\Transformer;
 
 use Konsulting\Laravel\Transformer\RulePacks\CoreRulePack;
 
-class TransformerTest extends \PHPUnit_Framework_TestCase
+class TransformerTest extends \PlainPhpTestCase
 {
     /** @test */
     function it_will_load_a_rulePack()

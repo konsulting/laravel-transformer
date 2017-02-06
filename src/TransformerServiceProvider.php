@@ -3,6 +3,7 @@
 namespace Konsulting\Laravel\Transformer;
 
 use Illuminate\Support\Arr;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 
@@ -25,6 +26,7 @@ class TransformerServiceProvider extends ServiceProvider
 
         $this->checkForCollectionExtensions();
         $this->registerTransformer();
+        $this->registerRequestTransformMacro();
     }
 
     /**
@@ -48,5 +50,20 @@ class TransformerServiceProvider extends ServiceProvider
         $this->app->singleton(Transformer::class, function () {
             return new Transformer(config('transformer.rule_packs', []));
         });
+    }
+
+    public function registerRequestTransformMacro()
+    {
+        if (! Request::hasMacro('transform')) {
+            Request::macro('transform', function ($rules = []) {
+                $this->replace(
+                    app(Transformer::class)
+                        ->transform($this->all(), $rules)
+                        ->all()
+                );
+
+                return $this;
+            });
+        }
     }
 }

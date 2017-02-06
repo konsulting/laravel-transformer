@@ -1,11 +1,10 @@
 <?php
 
-namespace Konsulting\Transformer;
+namespace Konsulting\Laravel\Transformer;
 
-use Konsulting\Laravel\Transformer\Transformer;
 use Konsulting\Laravel\Transformer\RulePacks\CoreRulePack;
 
-class CoreRulePackTest extends \PHPUnit_Framework_TestCase
+class CoreRulePackTest extends \PlainPhpTestCase
 {
     protected $transformer;
 
