@@ -7,6 +7,6 @@ return [
     ],
 
     'middleware_rules' => [
-        '**' => 'trim|return_null_if_empty',
+        '**' => 'trim|return_null_if_empty_string',
     ],
 ];

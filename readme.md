@@ -105,10 +105,13 @@ We provide a couple of rule packs for use, it is easy to extend the rules availa
 
 ##### Cleaning up
 * `null_if_empty`
+* `null_if_empty_string`
 * `return_null_if_empty`
+* `return_null_if_empty_string`
 * `bail_if_null`
 * `drop_if_null`
 * `drop_if_empty`
+* `drop_if_empty_string`
 * `trim` - optional parameter of char to trim.
 
 ##### Casting

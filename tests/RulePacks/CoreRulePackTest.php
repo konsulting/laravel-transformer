@@ -30,4 +30,22 @@ class CoreRulePackTest extends \PlainPhpTestCase
 
         $this->assertEquals($expected, $this->transformer->transform($data, ['a' => 'alphaDash'])->toArray());
     }
+
+    /** @test **/
+    public function the_null_if_empty_string_works()
+    {
+        $this->assertEquals(['a' => null], $this->transformer->transform(['a' => ''], ['a' => 'null_if_empty_string'])->toArray());
+    }
+
+    /** @test **/
+    public function the_return_null_if_empty_string_works()
+    {
+        $this->assertEquals(['a' => null, 'b' => 'A'], $this->transformer->transform(['a' => '', 'b' => 'a'], ['*' => 'return_null_if_empty_string|uppercase'])->toArray());
+    }
+
+    /** @test **/
+    public function the_drop_null_if_empty_string_works()
+    {
+        $this->assertEquals([], $this->transformer->transform(['a' => ''], ['a' => '_drop_if_empty_string'])->toArray());
+    }
 }

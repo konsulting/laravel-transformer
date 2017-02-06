@@ -19,6 +19,18 @@ class CoreRulePack extends RulePack
     }
 
     /**
+     * Convert empty string values to null.
+     *
+     * @param mixed $value
+     *
+     * @return mixed
+     */
+    public function ruleNullIfEmptyString($value)
+    {
+        return (is_string($value) && $value === '') ? null : $value;
+    }
+
+    /**
      * Stop processing rules if null.
      *
      * @param $value
@@ -45,6 +57,18 @@ class CoreRulePack extends RulePack
     }
 
     /**
+     * Return null if empty string, and stop processing rules.
+     *
+     * @param $value
+     *
+     * @return null
+     */
+    public function ruleReturnNullIfEmptyString($value)
+    {
+        return $this->ruleBailIfNull($this->ruleNullIfEmptyString($value));
+    }
+
+    /**
      * Drop field if value is null.
      *
      * @param $value
@@ -67,9 +91,19 @@ class CoreRulePack extends RulePack
      */
     public function ruleDropIfEmpty($value)
     {
-        $this->transformer->drop(empty($value));
+        return $this->ruleDropIfNull($this->ruleNullIfEmpty($value));
+    }
 
-        return $value;
+    /**
+     * Drop field if value equates to empty string.
+     *
+     * @param $value
+     *
+     * @return null
+     */
+    public function ruleDropIfEmptyString($value)
+    {
+        return $this->ruleDropIfNull($this->ruleNullIfEmptyString($value));
     }
 
     /**

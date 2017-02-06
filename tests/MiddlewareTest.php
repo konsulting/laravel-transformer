@@ -8,7 +8,7 @@ use Konsulting\Laravel\Transformer\Middleware\TransformRequest;
 class MiddlewareTest extends \LaravelTestCase
 {
     /** @test */
-    function it_nullifies_if_empty_and_trims_request_data()
+    function it_trims_and_nullifies_empty_strings_request_data()
     {
         $request = Request::create('', 'POST', ['name' => '   a b c     ', 'email' => '', 'address' => '     ']);
 
