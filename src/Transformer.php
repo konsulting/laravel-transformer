@@ -269,7 +269,7 @@ class Transformer
     {
         $split = [];
 
-        if ( ! preg_match('/^([\w]+):?([\w-,"]*)?$/', $expression, $split)) {
+        if ( ! preg_match('/^([\w]+):?([\w\s-,"]*)?$/', $expression, $split)) {
             throw new UnexpectedValue('Transform rules not in recognised format rule:param1,param2');
         }
 
