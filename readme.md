@@ -101,36 +101,39 @@ To transform data, the `transform` method is used. It accepts an array (or colle
 ### Available Rules
 We provide a couple of rule packs for use, it is easy to extend the rules available by creating your own Rule Pack. Rule Packs are loaded in the declared order, methods in later packs will override packs loaded earlier.
 
+Required paramenters are denoted by `<param>` and optional parameters by `[param]`.
+
 #### Core Rule Pack
 
 ##### Cleaning up
 * `null_if_empty`
 * `null_if_empty_string`
-* `return_null_if_empty`
-* `return_null_if_empty_string`
+* `return_null_if_empty` – equivalent to `null_if_empty|bail_if_null`.
+* `return_null_if_empty_string` – equivalent to `null_if_empty_string|bail_if_null`.
 * `bail_if_null`
 * `drop_if_null`
 * `drop_if_empty`
 * `drop_if_empty_string`
-* `trim` - optional parameter of char to trim.
+* `trim:[character_to_trim]` – trims space characters by default.
 
 ##### Casting
-* `string` - convert to string, an array is transformed to a CSV or returns ‘’ for items that cannot be represented as a string
+* `string` - convert to string, an array is transformed to a CSV or returns ‘’ for items that cannot be represented as a string.
 * `boolean` 
 * `array` 
 * `collection` - convert to `Illuminate\Support\Collection`
 * `json` 
 * `float` 
 * `integer`
-* `date_time` - optional timezone parameter
-* `date_time_immutable` - optional timezone parameter
+* `date_time:[timezone]`
+* `date_time_immutable:[timezone]`
 
 ##### String manipulation
 * `uppercase`
 * `lowercase`
 
-#####  Regex
-* `regex_replace`
+#####  Regex and string replace
+* `replace:<search_string>,<replace_string>`
+* `regex_replace:<search_regex>,<replace_string>`
 * `numeric`
 * `alpha`
 * `alpha_dash`
@@ -139,7 +142,7 @@ We provide a couple of rule packs for use, it is easy to extend the rules availa
 
 #### Carbon Rule Pack
 * `carbon`
-* `date_format` - parameter for the format required
+* `date_format` - parameter for the format required.
 
 ### Laravel Helpers
 We use Laravel frequently, so have a couple of extras added here.
