@@ -67,6 +67,13 @@ class Transformer
     protected $ruleMethods = [];
 
     /**
+     * Track the indices that the current field has during execution of the rules
+     *
+     * @var array
+     */
+    protected $loopIndices = [];
+
+    /**
      * Transformer constructor.
      *
      * @param  array|string $rulePacks
@@ -155,21 +162,25 @@ class Transformer
         $this->bail(false);
         $this->drop(false);
 
-        foreach ($this->matchedRules[$field] as $rule => $parameters) {
-            $ruleMethod = $this->getRuleMethod($rule);
+        foreach ($this->matchedRules[$field] as $set) {
+            $this->loopIndices = $set['indices'];
 
-            $result = $this->{$ruleMethod}($this->data->fromDot($field)->first(), ...$parameters);
+            foreach ($set['set'] as $rule => $parameters) {
+                $ruleMethod = $this->getRuleMethod($rule);
 
-            if ($this->shouldDrop()) {
-                $this->data->forget($field);
+                $result = $this->{$ruleMethod}($this->data->fromDot($field)->first(), ...$parameters);
 
-                return;
-            }
+                if ($this->shouldDrop()) {
+                    $this->data->forget($field);
 
-            $this->data = $this->data->merge(Arr::dot(is_array($result) ? $result : [$field => $result]));
+                    return;
+                }
 
-            if ($this->shouldBail()) {
-                return;
+                $this->data = $this->data->merge(Arr::dot(is_array($result) ? $result : [$field => $result]));
+
+                if ($this->shouldBail()) {
+                    return;
+                }
             }
         }
     }
@@ -212,10 +223,13 @@ class Transformer
     protected function matchRulesToFields(): self
     {
         foreach ($this->rules as $fieldExpression => $ruleSet) {
-            $this->matchedRules = array_merge_recursive($this->matchedRules, array_fill_keys(
-                $this->findMatchingFields($fieldExpression),
-                $ruleSet
-            ));
+            foreach ($this->findMatchingFields($fieldExpression) as $fieldName => $indices) {
+                $this->matchedRules[$fieldName][] = [
+                    'fieldExpression' => $fieldExpression,
+                    'indices' => $indices,
+                    'set' => $ruleSet,
+                ];
+            }
         }
 
         return $this;
@@ -223,6 +237,8 @@ class Transformer
 
     /**
      * Parse fieldExpression to match all the fields in the data we need to transform
+     * It passes back an array of field names with a set of 'indices' associated
+     * to each field name (these are where we match wildcards).
      *
      * @param $fieldExpression
      *
@@ -231,14 +247,17 @@ class Transformer
     protected function findMatchingFields($fieldExpression): array
     {
         if ($fieldExpression == '**') {
-            return explode('|', $this->dataKeysForRegex);
+            return array_fill_keys(explode('|', $this->dataKeysForRegex), []);
         }
 
         $matches = [];
-        $regex = str_replace(['.', '*'], ['\.', '[^\\.|]+'], $fieldExpression);
-        preg_match_all("/({$regex})/", $this->dataKeysForRegex, $matches);
+        $regex = str_replace(['.', '*'], ['\.', '([^\\.|]+)'], $fieldExpression);
+        preg_match_all("/({$regex})/", $this->dataKeysForRegex, $matches, PREG_SET_ORDER);
 
-        return array_unique($matches[0]);
+        return array_reduce($matches, function ($results, $match) {
+            $results[$match[0]] = array_slice($match, 2);
+            return $results;
+        }, []);
     }
 
     /**
@@ -263,18 +282,13 @@ class Transformer
      * @param $expression
      *
      * @return mixed
-     * @throws UnexpectedValue
      */
     protected function parseRuleExpression($expression): array
     {
-        $split = [];
+        $split = explode(':', $expression, 2);
 
-        if ( ! preg_match('/^([\w]+):?([\w\s-,"]*)?$/', $expression, $split)) {
-            throw new UnexpectedValue('Transform rules not in recognised format rule:param1,param2');
-        }
-
-        $rule = $this->validateRule($split[1]);
-        $parameters = empty($split[2]) ? [] : str_getcsv($split[2]);
+        $rule = $this->validateRule($split[0]);
+        $parameters = empty($split[1]) ? [] : str_getcsv($split[1]);
 
         return [$rule => $parameters];
     }
@@ -378,5 +392,23 @@ class Transformer
     protected function getClassName($class): string
     {
         return is_string($class) ? $class : get_class($class);
+    }
+
+    /**
+     * Parse the parameters that have been passed in and try to find an associated
+     * value in the current data collection, by replacing wildcards with the
+     * indices that are kept for the current loop.
+     *
+     * @param $parameter
+     *
+     * @return mixed
+     * @internal param $indices
+     *
+     * @internal param $parameters
+     * @internal param $set
+     */
+    public function getValue($parameter)
+    {
+        return $this->data->dotGet(sprintf(str_replace('*', '%s', $parameter), ...$this->loopIndices));
     }
 }

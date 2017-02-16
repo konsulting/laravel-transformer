@@ -3,6 +3,7 @@
 namespace Konsulting\Laravel\Transformer;
 
 use Konsulting\Laravel\Transformer\RulePacks\CoreRulePack;
+use Konsulting\Laravel\Transformer\RulePacks\RelatedFieldsRulePack;
 use Konsulting\Laravel\Transformer\RulePacks\RulePack;
 
 class TransformerTest extends \PlainPhpTestCase
@@ -115,11 +116,6 @@ class TransformerTest extends \PlainPhpTestCase
         );
     }
 
-    public function transformer()
-    {
-        return new Transformer(CoreRulePack::class);
-    }
-
     /** @test */
     function it_returns_an_array_of_loaded_rule_packs()
     {
@@ -128,6 +124,33 @@ class TransformerTest extends \PlainPhpTestCase
         $transformer = new Transformer($rulePacks);
 
         $this->assertEquals($rulePacks, $transformer->rulePacks());
+    }
+
+    /** @test */
+    function it_can_retrieve_values_for_use_in_rules_simple()
+    {
+        $data = ['a' => 'name', 'c' => 'other'];
+        $expected = ['a' => null, 'c' => 'other'];;
+        $transform = ['a' => 'null_without:b'];
+
+        $this->assertEquals($expected, $this->transformer(RelatedFieldsRulePack::class)->transform($data, $transform)->toArray());
+    }
+
+    /** @test */
+    function it_can_retrieve_values_for_use_in_rules_complex()
+    {
+        $data = ['a' => ['b' => [['name' => 'a', 'other' => 'something'],['name' => 'b'],['name' => 'c']]]];
+        $expected = ['a' => ['b' => [['name' => null, 'other' => 'something'], ['name' => null], ['name' => null]]]];;
+        $transform = [
+            'a.*.*.name' => 'null_without:a.*.*.nothing',
+        ];
+
+        $this->assertEquals($expected, $this->transformer(RelatedFieldsRulePack::class)->transform($data, $transform)->toArray());
+    }
+
+    public function transformer($packs = null)
+    {
+        return new Transformer(array_merge([CoreRulePack::class], (array) $packs));
     }
 }
 

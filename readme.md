@@ -144,6 +144,16 @@ Required paramenters are denoted by `<param>` and optional parameters by `[param
 * `carbon`
 * `date_format` - parameter for the format required.
 
+#### Related Fields Rule Pack
+* `null_with:<key>`
+* `drop_with:<key>`
+* `bail_with:<key>`
+* `null_without:<key>`
+* `drop without:<key>`
+* `bail_without:<key>`
+
+_**Note:** key is a dot notation key for another field in the dataset_
+
 ### Laravel Helpers
 We use Laravel frequently, so have a couple of extras added here.
 
