@@ -93,6 +93,8 @@ class Transformer
      */
     public function setRules(array $rules = []): self
     {
+        $this->rules = [];
+
         foreach ($rules as $fieldExpression => $ruleSet) {
             $this->rules[$fieldExpression] = $this->parseRuleSet($ruleSet);
         }
@@ -222,6 +224,8 @@ class Transformer
      */
     protected function matchRulesToFields(): self
     {
+        $this->matchedRules = [];
+
         foreach ($this->rules as $fieldExpression => $ruleSet) {
             foreach ($this->findMatchingFields($fieldExpression) as $fieldName => $indices) {
                 $this->matchedRules[$fieldName][] = [
