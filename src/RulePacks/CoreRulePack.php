@@ -142,7 +142,7 @@ class CoreRulePack extends RulePack
     public function ruleString($value)
     {
         try {
-            return is_array($value) ? str_putcsv($value) : (string)$value;
+            return is_array($value) ? str_putcsv($value) : (string) $value;
         } catch (\Exception $e) {
             return '';
         }
@@ -176,6 +176,14 @@ class CoreRulePack extends RulePack
     public function ruleInteger($value)
     {
         return (int) $this->ruleFloat($value);
+    }
+
+    /**
+     * Alias of ruleInteger.
+     */
+    public function ruleInt($value)
+    {
+        return $this->ruleInteger($value);
     }
 
     public function ruleDateTime($value, $timezone = null)
