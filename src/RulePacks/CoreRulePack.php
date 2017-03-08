@@ -114,9 +114,11 @@ class CoreRulePack extends RulePack
      *
      * @return string
      */
-    public function ruleTrim($value, $trim = ' ')
+    public function ruleTrim($value, $trim = null)
     {
-        return is_string($value) ? trim($value, $trim) : $value;
+        return is_string($value)
+            ? is_null($trim) ? trim($value) : trim($value, $trim)
+            : $value;
     }
 
     /**
