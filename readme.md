@@ -114,7 +114,7 @@ Required paramenters are denoted by `<param>` and optional parameters by `[param
 * `drop_if_null`
 * `drop_if_empty`
 * `drop_if_empty_string`
-* `trim:[character_to_trim]` – trims space characters by default.
+* `trim:[<character(s)_to_trim>]` – performs default PHP trim() if no characters supplied.
 
 ##### Casting
 * `string` - convert to string, an array is transformed to a CSV or returns ‘’ for items that cannot be represented as a string.
