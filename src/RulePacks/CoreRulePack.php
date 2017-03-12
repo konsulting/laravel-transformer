@@ -200,7 +200,7 @@ class CoreRulePack extends RulePack
 
     public function ruleRegexReplace($value, $regex = '*', $replace = '')
     {
-        return preg_replace('/' . preg_quote($regex, '/') . '/', $replace, $value);
+        return preg_replace('/' . $regex . '/', $replace, $value);
     }
 
     /*

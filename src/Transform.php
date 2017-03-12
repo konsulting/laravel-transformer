@@ -26,13 +26,6 @@ class Transform
     protected $input;
 
     /**
-     * The result of the transformation(s).
-     *
-     * @var mixed
-     */
-    protected $result;
-
-    /**
      * @var string
      */
     protected $currentRule;
@@ -61,7 +54,7 @@ class Transform
     {
         $this->transform();
 
-        return $this->result;
+        return $this->input;
     }
 
     /**
@@ -81,7 +74,7 @@ class Transform
      */
     protected function transform()
     {
-        $this->result = $this->transformer->transform(
+        $this->input = $this->transformer->transform(
             ['input' => $this->input],
             ['**' => $this->constructRule()]
         )->get('input');
@@ -110,7 +103,7 @@ class Transform
     {
         $this->fluent = false;
 
-        return $this->result;
+        return $this->input;
     }
 
     /**
