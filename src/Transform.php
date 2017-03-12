@@ -11,8 +11,18 @@ class Transform
      */
     protected $transformer;
 
+    /**
+     * Indicates if the fluent API is in use.
+     *
+     * @var bool
+     */
     protected $fluent = false;
 
+    /**
+     * The input value to be transformed.
+     *
+     * @var mixed
+     */
     protected $input;
 
     /**
@@ -22,8 +32,14 @@ class Transform
      */
     protected $result;
 
+    /**
+     * @var string
+     */
     protected $currentRule;
-    
+
+    /**
+     * @var array
+     */
     protected $ruleArguments;
 
     /**
@@ -39,34 +55,45 @@ class Transform
     /**
      * Perform a single transformation on the input.
      *
-     * @return self
+     * @return mixed
      */
     protected function transformSingle()
     {
-        return $this->transform();
+        $this->transform();
+
+        return $this->result;
     }
 
     /**
      * Perform a transformation on the input and return $this.
      *
-     * @return $this
+     * @return self
      */
-    protected function transformFluent()
+    protected function transformFluent() : self
     {
-        $this->result = $this->transform();
+        $this->transform();
 
         return $this;
     }
 
+    /**
+     * Perform the transformation.
+     */
     protected function transform()
     {
-        return $this->transformer->transform(
-            compact('input'),
+        $this->result = $this->transformer->transform(
+            ['input' => $this->input],
             ['**' => $this->constructRule()]
         )->get('input');
     }
 
-    public function input($input)
+    /**
+     * Set the input to be transformed.
+     *
+     * @param mixed $input
+     * @return self
+     */
+    public function input($input) : self
     {
         $this->input = $input;
         $this->fluent = true;
@@ -74,6 +101,11 @@ class Transform
         return $this;
     }
 
+    /**
+     * Get the result of the transformation(s).
+     *
+     * @return mixed
+     */
     public function get()
     {
         $this->fluent = false;
@@ -96,7 +128,7 @@ class Transform
      *
      * @param string $method
      * @param array  $args
-     * @return mixed
+     * @return self|mixed
      */
     public function __call(string $method, array $args)
     {

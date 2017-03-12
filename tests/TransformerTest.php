@@ -147,11 +147,6 @@ class TransformerTest extends \PlainPhpTestCase
 
         $this->assertEquals($expected, $this->transformer(RelatedFieldsRulePack::class)->transform($data, $transform)->toArray());
     }
-
-    public function transformer($packs = null)
-    {
-        return new Transformer(array_merge([CoreRulePack::class], (array) $packs));
-    }
 }
 
 
