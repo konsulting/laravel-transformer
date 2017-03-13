@@ -46,30 +46,6 @@ class Transform
     }
 
     /**
-     * Perform a single transformation on the input.
-     *
-     * @return mixed
-     */
-    protected function transformSingle()
-    {
-        $this->transform();
-
-        return $this->data;
-    }
-
-    /**
-     * Perform a transformation on the input and return $this.
-     *
-     * @return self
-     */
-    protected function transformFluent() : self
-    {
-        $this->transform();
-
-        return $this;
-    }
-
-    /**
      * Perform the transformation.
      */
     protected function transform()
@@ -132,8 +108,9 @@ class Transform
 
         $this->currentRule = $rule;
         $this->ruleArguments = $arguments;
+        $this->transform();
 
-        return $this->transformFluent();
+        return $this;
     }
 
     /**
@@ -173,8 +150,9 @@ class Transform
 
         $this->ruleArguments = $args;
         $this->currentRule = $method;
+        $this->transform();
 
-        return $this->fluent ? $this->transformFluent() : $this->transformSingle();
+        return $this->fluent ? $this : $this->data;
     }
 
     /**
