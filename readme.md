@@ -97,11 +97,47 @@ To transform data, the `transform` method is used. It accepts an array (or colle
         ],
     ];
 ```
+#### Transform helper
+There is also a helper class `Transform`, which facilitates the easy transformation of a single value by one or more rules. `Transform` receives an instance of `Transformer` via its constructor, which determines which provides the transformation logic and determines which rules are available.
+Using the instance of `Transformer` built up previously:
+
+```php
+use Konsulting\Laravel\Transformer\Transform;
+
+$transform = new Transform($transformer);
+```
+
+Rules may be called as a method on the class, with the value to be transformed passed in as the first argument and any rule parameters as subsequent arguments. 
+
+```php
+$transform->trim(' Some string to be trimmed   ');  // Outputs 'Some string to be trimmed'
+
+$transform->regexReplace('testing', 'e', 'oa');     // Outputs 'toasting'
+```
+
+Rules may also be called fluently: the input value is set with the `input()` method, and the result is obtained with `get()`.
+Any number of rule methods may be chained between these.
+
+```php
+$transform->input(' hello ')
+    ->trim()
+    ->regexReplace('hello', 'world')
+    ->uppercase()
+    ->get();
+    
+// Outputs 'WORLD'
+```
+
+```php 
+$transform->withRule();
+$transform->withRules([]);
+```
+
 
 ### Available Rules
 We provide a couple of rule packs for use, it is easy to extend the rules available by creating your own Rule Pack. Rule Packs are loaded in the declared order, methods in later packs will override packs loaded earlier.
 
-Required paramenters are denoted by `<param>` and optional parameters by `[param]`.
+Parameter names are denoted by `<param>` and optional parameters by `[<param>]`.
 
 #### Core Rule Pack
 
