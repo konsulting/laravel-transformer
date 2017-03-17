@@ -68,7 +68,7 @@ class Transform
         }
 
         foreach ($rules as $rule => $arguments) {
-            $value = $this->withRule($value, $rule, $arguments);
+            $value = $this->withRule($value, $rule, ...$arguments);
         }
 
         return $value;
@@ -112,7 +112,7 @@ class Transform
      */
     public function __call(string $method, array $args)
     {
-        return $this->transform($data = array_shift($args), $method, $args);
+        return $this->withRule($data = array_shift($args), $method, $args);
     }
 
     /**
