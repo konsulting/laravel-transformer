@@ -115,6 +115,26 @@ $transform->trim(' Some string to be trimmed   ');  // Outputs 'Some string to b
 $transform->regexReplace('testing', 'e', 'oa');     // Outputs 'toasting'
 ```
 
+Alternatively, rules may be passed via the `withRule()` and `withRules()` methods (for singular and multiple rules respectively).
+Rule parameters are passed either as separate subsequent arguments, or as an array. 
+
+```php
+$transform->withRule('  test  ', 'trim');                           // Outputs 'test'
+
+$transform->withRule('test', 'regex_replace', 'e', 'oa');           // Outputs 'toast'
+
+$transform->withRule('test', 'regex_replace', ['e', 'oa']);         // Outputs 'toast' as well
+
+
+$transform->withRules('  test  ', ['trim', 'uppercase']);           // Outputs 'TEST'
+
+$transform->withRules('--test--', [                                 // Outputs 'TOAST'
+    'trim'          => ['-'],
+    'regex_replace' => ['e', 'oa'],
+    'uppercase'     => [],
+]);
+```
+
 Rules may also be called fluently: the input value is set with the `input()` method, and the result is obtained with `get()`.
 Any number of rule methods may be chained between these.
 
@@ -128,7 +148,7 @@ $transform->input(' hello ')
 // Outputs 'WORLD'
 ```
 
-```php 
+```php
 $transform->input($input)
     ->withRule()
     ->get();
