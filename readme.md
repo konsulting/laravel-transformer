@@ -98,7 +98,7 @@ To transform data, the `transform` method is used. It accepts an array (or colle
     ];
 ```
 #### Transform helper
-There is also a helper class `Transform`, which facilitates the easy transformation of a single value by one or more rules. `Transform` receives an instance of `Transformer` via its constructor, which determines which provides the transformation logic and determines which rules are available.
+There is also a helper class `Transform`, which facilitates the easy transformation of a single value by one or more rules. `Transform` receives an instance of `Transformer` via its constructor, which provides the transformation logic and determines which rules are available.
 Using the instance of `Transformer` built up previously:
 
 ```php
@@ -129,8 +129,13 @@ $transform->input(' hello ')
 ```
 
 ```php 
-$transform->withRule();
-$transform->withRules([]);
+$transform->input($input)
+    ->withRule()
+    ->get();
+    
+$transform->input($input)
+    ->withRules([])
+    ->get();
 ```
 
 

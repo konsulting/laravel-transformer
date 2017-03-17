@@ -12,30 +12,6 @@ class Transform
     protected $transformer;
 
     /**
-     * Indicates if the fluent API is in use.
-     *
-     * @var bool
-     */
-    protected $fluent = false;
-
-    /**
-     * The input value to be transformed.
-     *
-     * @var mixed
-     */
-    protected $data;
-
-    /**
-     * @var string
-     */
-    protected $currentRule;
-
-    /**
-     * @var array
-     */
-    protected $ruleArguments;
-
-    /**
      * Receive Transformer instance.
      *
      * @param Transformer $transformer
@@ -47,92 +23,84 @@ class Transform
 
     /**
      * Perform the transformation.
+     *
+     * @param $data
+     * @param $rule
+     * @param $arguments
+     * @return mixed
      */
-    protected function transform()
+    protected function transform($data, $rule, $arguments)
     {
-        $this->data = $this->transformer->transform(
-            ['data' => $this->data],
-            ['**' => $this->constructRule()]
+        return $this->transformer->transform(
+            ['data' => $data],
+            ['**' => $this->constructRule($rule, $arguments)]
         )->get('data');
     }
 
     /**
-     * Set the input to be transformed.
+     * Return a fluent Transform instance and set the data to be transformed.
      *
      * @param mixed $input
-     * @return self
+     * @return TransformFluent
      */
-    public function input($input) : self
+    public function input($input) : TransformFluent
     {
-        $this->data = $input;
-        $this->fluent = true;
-
-        return $this;
+        return (new TransformFluent($this))->input($input);
     }
+
+    // Transform::withRules('data', ['trim', 'uppercase'];
 
     /**
      * Specify the rules to apply to the transformation.
      *
+     * @param       $value
      * @param array $rules
-     * @return self
+     * @return mixed
      */
-    public function withRules($rules) : self
+    public function withRules($value, $rules)
     {
         if ($this->isSequentialArray($rules)) {
             foreach ($rules as $rule) {
-                $this->withRule($rule);
+                $value = $this->withRule($value, $rule);
             }
 
-            return $this;
+            return $value;
         }
 
         foreach ($rules as $rule => $arguments) {
-            $this->withRule($rule, $arguments);
+            $value = $this->withRule($value, $rule, $arguments);
         }
 
-        return $this;
+        return $value;
     }
 
     /**
      * Specify a rule to apply to the transformation.
      *
+     * @param        $data
      * @param string $rule
      * @param array  $arguments
-     * @return self
+     * @return mixed
      */
-    public function withRule($rule, ...$arguments) : self
+    public function withRule($data, $rule, ...$arguments)
     {
         if (count($arguments) == 1 && is_array($arguments[0])) {
             $arguments = $arguments[0];
         }
 
-        $this->currentRule = $rule;
-        $this->ruleArguments = $arguments;
-        $this->transform();
-
-        return $this;
-    }
-
-    /**
-     * Get the result of the transformation(s).
-     *
-     * @return mixed
-     */
-    public function get()
-    {
-        $this->fluent = false;
-
-        return $this->data;
+        return $this->transform($data, $rule, $arguments);
     }
 
     /**
      * Format the rule and arguments for use with the transformer.
      *
+     * @param string $rule
+     * @param array  $arguments
      * @return string
      */
-    protected function constructRule() : string
+    protected function constructRule($rule, $arguments = []) : string
     {
-        return $this->currentRule . ($this->ruleArguments ? ':' . implode(',', $this->ruleArguments) : '');
+        return $rule . (! empty($arguments) ? ':' . implode(',', $arguments) : '');
     }
 
     /**
@@ -140,19 +108,11 @@ class Transform
      *
      * @param string $method
      * @param array  $args
-     * @return self|mixed
+     * @return mixed
      */
     public function __call(string $method, array $args)
     {
-        if ( ! $this->fluent) {
-            $this->data = array_shift($args);
-        }
-
-        $this->ruleArguments = $args;
-        $this->currentRule = $method;
-        $this->transform();
-
-        return $this->fluent ? $this : $this->data;
+        return $this->transform($data = array_shift($args), $method, $args);
     }
 
     /**
@@ -161,7 +121,7 @@ class Transform
      * @param array $arr
      * @return bool
      */
-    protected function isSequentialArray(array $arr)
+    protected function isSequentialArray(array $arr) : bool
     {
         return $arr !== [] && array_keys($arr) === range(0, count($arr) - 1);
     }
