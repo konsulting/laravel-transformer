@@ -63,7 +63,7 @@ A set of rules can be passed in during construction (useful when applying the sa
 
 To transform data, the `transform` method is used. It accepts an array (or collection) of data to transform, and optionally rules to apply.
 
-* Rules are presented in a similar manner to the Laravel Validator. They provide functionality to handle nested data, and follow the same string format.
+* Rules are presented in a similar manner to the [Laravel Validator](https://laravel.com/docs/5.4/validation). They provide functionality to handle nested data, and follow the same string format.
 * Arrays of rules are indexed by a field expression and provide a `|` (pipe) delimited list of rules to apply. 
 * Rules may be provided a set of parameters in CSV format. Field expressions may use `*` as a wildcard to match elements at that depth and `**` as a special case to match everything. 
 * Rule sequences are built up in the order they are provided.
@@ -89,15 +89,15 @@ To transform data, the `transform` method is used. It accepts an array (or colle
     
     $result = $transformer->transform($data, $rules);
     
-    $resultIs = [
-        'name' => 'Keoghan Litchfield',
-        'contacts' => [
-            ['name' => 'ROBIN'],
-            ['name' => 'ROGER'],
-        ],
-    ];
+    //    Outputs [
+    //        'name' => 'Keoghan Litchfield',
+    //        'contacts' => [
+    //            ['name' => 'ROBIN'],
+    //            ['name' => 'ROGER'],
+    //        ],
+    //    ];
 ```
-#### Transform helper
+### Transform helper
 There is also a helper class `Transform`, which facilitates the easy transformation of a single value by one or more rules. `Transform` receives an instance of `Transformer` via its constructor, which provides the transformation logic and determines which rules are available.
 Using the instance of `Transformer` built up previously:
 
@@ -119,15 +119,19 @@ Alternatively, rules may be passed via the `withRule()` and `withRules()` method
 Rule parameters are passed either as separate subsequent arguments, or as an array. 
 
 ```php
+// Single rule
 $transform->withRule('  test  ', 'trim');                           // Outputs 'test'
 
+// Single rule with parameters passed as separate arguments
 $transform->withRule('test', 'regex_replace', 'e', 'oa');           // Outputs 'toast'
 
+// Singe rule with paramets passed as an array
 $transform->withRule('test', 'regex_replace', ['e', 'oa']);         // Outputs 'toast' as well
 
-
+// Multiple rules passed as a sequential array
 $transform->withRules('  test  ', ['trim', 'uppercase']);           // Outputs 'TEST'
 
+// Multiple rules and arguments passed as an assocative array: [$rule => [$param1, $param2], $rule2 => []...]
 $transform->withRules('--test--', [                                 // Outputs 'TOAST'
     'trim'          => ['-'],
     'regex_replace' => ['e', 'oa'],
@@ -343,11 +347,11 @@ Contributions are welcome and will be fully credited. We will accept contributio
 
 Please:
 
-* Use the PSR-2 Coding Standard
+* Use the PSR-2 Coding Standard.
 * Add tests, if you’re not sure how, please ask.
 * Document changes in behaviour, including readme.md.
 
 ## Testing
-We use [PHPUnit](https://phpunit.de) and the excellent [orchestral/testbench](https://github.com/orchestral/testbench) 
+We use [PHPUnit](https://phpunit.de) and the excellent [orchestral/testbench](https://github.com/orchestral/testbench).
 
 Run tests using PHPUnit: `vendor/bin/phpunit`

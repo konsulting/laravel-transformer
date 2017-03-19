@@ -14,19 +14,6 @@ class TransformFluent
     }
 
     /**
-     * Set the input to be transformed.
-     *
-     * @param mixed $input
-     * @return self
-     */
-    public function input($input) : self
-    {
-        $this->data = $input;
-
-        return $this;
-    }
-
-    /**
      * Allow transformer rules to be called as methods.
      *
      * @param string $method
@@ -40,6 +27,19 @@ class TransformFluent
         return $this;
     }
 
+    /**
+     * Set the input to be transformed.
+     *
+     * @param mixed $input
+     * @return self
+     */
+    public function input($input) : self
+    {
+        $this->data = $input;
+
+        return $this;
+    }
+    
     /**
      * Get the result of the transformation(s).
      *
