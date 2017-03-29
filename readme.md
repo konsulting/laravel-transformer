@@ -107,7 +107,7 @@ use Konsulting\Laravel\Transformer\Transform;
 $transform = new Transform($transformer);
 ```
 
-Rules may be called as a method on the class, with the value to be transformed passed in as the first argument and any rule parameters as subsequent arguments. 
+Rules may be called as methods on the `Transform` object, with the value to be transformed passed in as the first argument and any rule parameters as subsequent arguments. 
 
 ```php
 $transform->trim(' Some string to be trimmed   ');  // Outputs 'Some string to be trimmed'
@@ -116,7 +116,7 @@ $transform->regexReplace('testing', 'e', 'oa');     // Outputs 'toasting'
 ```
 
 Alternatively, rules may be passed via the `withRule()` and `withRules()` methods (for singular and multiple rules respectively).
-Rule parameters are passed either as separate subsequent arguments, or as an array. 
+Rule parameters are passed either as separate arguments, or as an array. 
 
 ```php
 // Single rule
@@ -125,20 +125,20 @@ $transform->withRule('  test  ', 'trim');                           // Outputs '
 // Single rule with parameters passed as separate arguments
 $transform->withRule('test', 'regex_replace', 'e', 'oa');           // Outputs 'toast'
 
-// Singe rule with paramets passed as an array
+// Singe rule with parameters passed as an array
 $transform->withRule('test', 'regex_replace', ['e', 'oa']);         // Outputs 'toast' as well
 
 // Multiple rules passed as a sequential array
 $transform->withRules('  test  ', ['trim', 'uppercase']);           // Outputs 'TEST'
 
-// Multiple rules and arguments passed as an assocative array: [$rule => [$param1, $param2], $rule2 => []...]
+// Multiple rules and parameters passed as an assocative array: [$rule => [$param1, $param2], $rule2 => []...]
 $transform->withRules('--test--', [                                 // Outputs 'TOAST'
     'trim'          => ['-'],
     'regex_replace' => ['e', 'oa'],
     'uppercase'     => [],
 ]);
 ```
-
+#### Fluent API
 Rules may also be called fluently: the input value is set with the `input()` method, and the result is obtained with `get()`.
 Any number of rule methods may be chained between these.
 
@@ -151,17 +151,21 @@ $transform->input(' hello ')
     
 // Outputs 'WORLD'
 ```
+When the fluent API is used, the value is not passed as an argument to the rule methods (as it has already been set via `input()`).
+As such, all arguments passed to rule methods are treated as rule parameters.
 
+`withRule()` and `withRules()` may be used to fluently declare rules with or without parameters:
 ```php
 $transform->input($input)
-    ->withRule()
+    ->withRule('trim')
+    ->uppercase()
     ->get();
     
 $transform->input($input)
-    ->withRules([])
+    ->lowercase()
+    ->withRules(['trim', 'uppercase'])
     ->get();
 ```
-
 
 ### Available Rules
 We provide a couple of rule packs for use, it is easy to extend the rules available by creating your own Rule Pack. Rule Packs are loaded in the declared order, methods in later packs will override packs loaded earlier.
