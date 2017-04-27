@@ -221,6 +221,9 @@ Parameter names are denoted by `<param>` and optional parameters by `[<param>]`.
 * `drop without:<key>`
 * `bail_without:<key>`
 
+#### Number Rule Pack
+* `clamp:<min>,<max>` - constrain a number between two values
+
 _**Note:** key is a dot notation key for another field in the dataset_
 
 ### Laravel Helpers
