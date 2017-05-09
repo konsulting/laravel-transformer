@@ -13,5 +13,5 @@ abstract class TransformRule
         return $this;
     }
 
-    abstract function apply($input);
+    abstract public function apply($input);
 }
