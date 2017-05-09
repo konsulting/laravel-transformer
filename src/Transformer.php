@@ -4,7 +4,6 @@ namespace Konsulting\Laravel\Transformer;
 
 use Closure;
 use Illuminate\Support\Arr;
-use UnexpectedValueException;
 use Illuminate\Support\Collection;
 use Konsulting\Laravel\Transformer\RulePacks\RulePack;
 use Konsulting\Laravel\Transformer\Exceptions\InvalidRule;
@@ -21,7 +20,7 @@ class Transformer
     /**
      * A pipe separated listing of dot-formatted data keys, used for regex matching of fields.
      *
-     * @var String
+     * @var string
      */
     protected $dataKeysForRegex = '';
 
@@ -54,21 +53,21 @@ class Transformer
     protected $drop;
 
     /**
-     * Index of loaded RulePacks
+     * Index of loaded RulePacks.
      *
      * @var array
      */
     protected $rulePacks = [];
 
     /**
-     * Index of transformation rules, linking to their parent RulePack
+     * Index of transformation rules, linking to their parent RulePack.
      *
      * @var array
      */
     protected $ruleMethods = [];
 
     /**
-     * Track the indices that the current field has during execution of the rules
+     * Track the indices that the current field has during execution of the rules.
      *
      * @var array
      */
@@ -117,7 +116,7 @@ class Transformer
     }
 
     /**
-     * Perform the transformation
+     * Perform the transformation.
      *
      * @param array $data
      * @param array $rules
@@ -137,7 +136,7 @@ class Transformer
     }
 
     /**
-     * Apply the matched rules to the input
+     * Apply the matched rules to the input.
      *
      * @return self
      */
@@ -166,7 +165,6 @@ class Transformer
             $this->loopIndices = $set['indices'];
 
             foreach ($set['set'] as $rule => $parameters) {
-
                 $input = $this->data->fromDot($field)->first();
 
                 if ($parameters instanceof Closure) {
@@ -320,7 +318,7 @@ class Transformer
             return [$expression->bindTo($this)];
         }
 
-        if($expression instanceof TransformRule) {
+        if ($expression instanceof TransformRule) {
             return [$expression];
         }
 
@@ -350,7 +348,7 @@ class Transformer
      */
     protected function validateRule($rule) : string
     {
-        if ( ! isset($this->ruleMethods[$this->getRuleMethod($rule)])) {
+        if (! isset($this->ruleMethods[$this->getRuleMethod($rule)])) {
             throw new InvalidRule($rule);
         }
 
@@ -390,7 +388,7 @@ class Transformer
     /**
      * Register a rule pack.
      *
-     * @param RulePack|String $rulePack
+     * @param RulePack|string $rulePack
      * @return Transformer
      */
     public function addRulePack($rulePack) : self
@@ -398,11 +396,11 @@ class Transformer
         $rulePackClass = $this->getClassName($rulePack);
         $rulePack = new $rulePackClass;
 
-        if ( ! ($rulePack instanceof RulePack)) {
-            throw new UnexpectedValueException('RulePack must be an instance of ' . RulePack::class);
+        if (! ($rulePack instanceof RulePack)) {
+            throw new \UnexpectedValueException('RulePack must be an instance of ' . RulePack::class);
         }
 
-        if ( ! $this->hasRulePack($rulePack)) {
+        if (! $this->hasRulePack($rulePack)) {
             $this->rulePacks[$rulePackClass] = $rulePack->transformer($this);
 
             $ruleMethods = array_fill_keys($rulePack->provides(), $rulePackClass);
@@ -414,8 +412,8 @@ class Transformer
 
     /**
      * Check if the Transformer instance has a given rule pack.
-     *
-     * @param RulePack|String $rulePack
+     * 
+     * @param RulePack|string $rulePack
      * @return bool
      */
     public function hasRulePack($rulePack) : bool
