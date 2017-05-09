@@ -2,11 +2,12 @@
 
 namespace Konsulting\Laravel\Transformer;
 
+use Closure;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Konsulting\Laravel\Transformer\Exceptions\InvalidRule;
-use Konsulting\Laravel\Transformer\RulePacks\RulePack;
 use UnexpectedValueException;
+use Illuminate\Support\Collection;
+use Konsulting\Laravel\Transformer\RulePacks\RulePack;
+use Konsulting\Laravel\Transformer\Exceptions\InvalidRule;
 
 class Transformer
 {
@@ -165,9 +166,16 @@ class Transformer
             $this->loopIndices = $set['indices'];
 
             foreach ($set['set'] as $rule => $parameters) {
-                $ruleMethod = $this->getRuleMethod($rule);
 
-                $result = $this->{$ruleMethod}($this->data->fromDot($field)->first(), ...$parameters);
+                $input = $this->data->fromDot($field)->first();
+
+                if ($parameters instanceof Closure) {
+                    $result = $parameters($input);
+                } elseif ($parameters instanceof TransformRule) {
+                    $result = $parameters->setTransformer($this)->apply($input);
+                } else {
+                    $result = $this->{$this->getRuleMethod($rule)}($input, ...$parameters);
+                }
 
                 if ($this->shouldDrop()) {
                     $this->data->forget($field);
@@ -290,9 +298,10 @@ class Transformer
      */
     protected function parseRuleSet($set) : array
     {
+        $set = is_array($set) ? $set : explode('|', $set);
         $ruleSet = [];
 
-        foreach (explode('|', $set) as $expression) {
+        foreach ($set as $expression) {
             $ruleSet = array_merge($ruleSet, $this->parseRuleExpression($expression));
         }
 
@@ -306,6 +315,24 @@ class Transformer
      * @return mixed
      */
     protected function parseRuleExpression($expression) : array
+    {
+        if ($expression instanceof Closure) {
+            return [$expression->bindTo($this)];
+        }
+
+        if($expression instanceof TransformRule) {
+            return [$expression];
+        }
+
+        return $this->parseTextRuleExpression($expression);
+    }
+
+    /**
+     * @param string $expression
+     *
+     * @return array
+     */
+    protected function parseTextRuleExpression(string $expression): array
     {
         $split = explode(':', $expression, 2);
 
