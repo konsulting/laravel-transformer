@@ -243,7 +243,6 @@ class CoreRulePack extends RulePack
         return preg_replace('/[^\pL\pM\pN\s_-]/u', '', $value);
     }
 
-
     /*
      * Perform string replacement.
      */

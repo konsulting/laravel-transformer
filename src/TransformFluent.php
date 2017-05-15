@@ -39,7 +39,7 @@ class TransformFluent
 
         return $this;
     }
-    
+
     /**
      * Get the result of the transformation(s).
      *

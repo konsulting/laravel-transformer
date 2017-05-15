@@ -20,5 +20,4 @@ class TransformRequest
 
         return $next($request);
     }
-
 }

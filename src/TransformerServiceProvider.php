@@ -9,7 +9,6 @@ use Illuminate\Support\ServiceProvider;
 
 class TransformerServiceProvider extends ServiceProvider
 {
-
     public function boot()
     {
         $this->publishes([
@@ -30,7 +29,7 @@ class TransformerServiceProvider extends ServiceProvider
     }
 
     /**
-     * Verify we have the necessary extensions
+     * Verify we have the necessary extensions.
      */
     public function checkForCollectionExtensions()
     {
@@ -43,7 +42,7 @@ class TransformerServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register the Transformer singleton
+     * Register the Transformer singleton.
      */
     public function registerTransformer()
     {
