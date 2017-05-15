@@ -412,7 +412,7 @@ class Transformer
 
     /**
      * Check if the Transformer instance has a given rule pack.
-     * 
+     *
      * @param RulePack|string $rulePack
      * @return bool
      */
