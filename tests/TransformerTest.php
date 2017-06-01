@@ -147,6 +147,47 @@ class TransformerTest extends \PlainPhpTestCase
 
         $this->assertEquals($expected, $this->transformer(RelatedFieldsRulePack::class)->transform($data, $transform)->toArray());
     }
+
+    /** @test */
+    function it_will_allow_rule_sets_to_be_provided_as_arrays()
+    {
+        $data = ['a' => '  trimmed  '];
+        $expected = ['a' => 'TRIMMED'];;
+        $transform = [
+            '*' => ['trim', 'uppercase'],
+        ];
+
+        $this->assertEquals($expected,
+            $this->transformer()->transform($data, $transform)->toArray());
+    }
+
+    /** @test */
+    function it_will_allow_rule_sets_to_contain_closures()
+    {
+        $data = ['a' => '  trimmed  '];
+        $expected = ['a' => 'TRIMMED'];;
+        $transform = [
+            '*' => [function ($input) {
+                return strtoupper(trim($input));
+            }],
+        ];
+
+        $this->assertEquals($expected,
+            $this->transformer()->transform($data, $transform)->toArray());
+    }
+
+    /** @test */
+    function it_will_allow_rule_sets_to_contain_transform_rules()
+    {
+        $data = ['a' => '  trimmed  '];
+        $expected = ['a' => 'TRIMMED'];;
+        $transform = [
+            '*' => [new TestRule()],
+        ];
+
+        $this->assertEquals($expected,
+            $this->transformer()->transform($data, $transform)->toArray());
+    }
 }
 
 
@@ -156,4 +197,11 @@ class rulePackOne extends RulePack
 
 class rulePackTwo extends RulePack
 {
+}
+
+class TestRule extends TransformRule
+{
+    public function apply($input) {
+        return strtoupper(trim($input));
+    }
 }

@@ -1,0 +1,16 @@
+preset: laravel
+
+risky: false
+
+disabled:
+  concat_without_spaces
+
+enabled:
+  concat_with_spaces
+
+finder:
+  name:
+    - "*.php"
+
+  exclude:
+    - "tests"
