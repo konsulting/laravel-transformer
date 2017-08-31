@@ -3,7 +3,7 @@
 use Konsulting\Laravel\Transformer\RulePacks\CoreRulePack;
 use Konsulting\Laravel\Transformer\Transformer;
 
-abstract class PlainPhpTestCase extends PHPUnit_Framework_TestCase
+abstract class PlainPhpTestCase extends PHPUnit\Framework\TestCase
 {
     public static function setUpBeforeClass()
     {

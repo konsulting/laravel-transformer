@@ -5,17 +5,20 @@
 * Install Transformer using composer: `composer require konsulting/laravel-transformer`
 
 ### Transformer in a Laravel application
-* Transformer uses `Illuminate\Support\Collection` and `Illuminate\Support\Arr`, and requires a couple of extensions to these. 
+* Transformer uses `Illuminate\Support\Collection` and `Illuminate\Support\Arr`, and requires a couple of extensions to these.
 The extensions are available in the `konsulting/laravel-extend-collections` package.
 * You'll need both the `CollectionsServiceProvider` from that package, and `TransformerServiceProvider` in your `config/app.php`.
+
+If you are using Laravel 5.5, they will auto-register. However, if you have chosen not to auto-register,
+or are using an earlier version, add the following to `config/app.php`
 
 ```php
 'providers' => [
     // Other service providers...
-    
+
     Konsulting\Laravel\CollectionsServiceProvider::class,
     Konsulting\Laravel\Transformer\TransformerServiceProvider::class,
-],	
+],
 ```
 
 * Optionally, add the Transformer Facade to `config/app.php`
@@ -28,31 +31,31 @@ The extensions are available in the `konsulting/laravel-extend-collections` pack
 ],
 ```
 
-* Optionally publish the config file, and adjust the rule packs you want to use. 
+* Optionally publish the config file, and adjust the rule packs you want to use.
 `php artisan vendor:publish --provider=Konsulting\\Laravel\\Transformer\\TransformerServiceProvider --tag=config`
 
 ### Transformer outside a Laravel application
-* Transformer uses `Illuminate\Support\Collection` and `Illuminate\Support\Arr`. Outside a Laravel application, 
+* Transformer uses `Illuminate\Support\Collection` and `Illuminate\Support\Arr`. Outside a Laravel application,
 it will use `tighten/collect` (an extraction of Collection && Arr from Laravel's Illuminate\Support) to get these dependencies.
-* Transform also requires a couple of extensions to these. The extensions are available in the 
-`konsulting/laravel-extend-collections` package. You'll need to register the extensions manually. 
+* Transform also requires a couple of extensions to these. The extensions are available in the
+`konsulting/laravel-extend-collections` package. You'll need to register the extensions manually.
 * You will need to build up your Transformer manually for use in your application.
 
 ```php
     // Basic example
-    
+
     use Konsulting\Laravel\Transformer\Transformer;
     use Konsulting\Laravel\Transformer\RulePacks\CoreRulePack;
     use Konsulting\Laravel\Transformer\RulePacks\CarbonRulePack;
-    
+
     require __DIR__ . '/../vendor/autoload.php';
-    
+
     // Extend Illuminate\Support\Arr and Illuminate\Support\Collection
     \Konsulting\Laravel\load_collection_extensions();
-    
+
     // Build up Transformer
     $transformer = new Transformer([CoreRulePack::class, CarbonRulePack::class]);
-    
+
     // Transformer now available to use, see Usage
 ```
 
@@ -64,19 +67,19 @@ A set of rules can be passed in during construction (useful when applying the sa
 To transform data, the `transform` method is used. It accepts an array (or collection) of data to transform, and optionally rules to apply.
 
 * Rules are presented in a similar manner to the [Laravel Validator](https://laravel.com/docs/5.4/validation). They provide functionality to handle nested data, and follow the same string format.
-* Arrays of rules are indexed by a field expression and provide a `|` (pipe) delimited list of rules to apply. 
-* Rules may be provided a set of parameters in CSV format. Field expressions may use `*` as a wildcard to match elements at that depth and `**` as a special case to match everything. 
+* Arrays of rules are indexed by a field expression and provide a `|` (pipe) delimited list of rules to apply.
+* Rules may be provided a set of parameters in CSV format. Field expressions may use `*` as a wildcard to match elements at that depth and `**` as a special case to match everything.
 * Rule sequences are built up in the order they are provided.
 
 ```php
     // using the $transformer built up earlier
-    
+
     $rules = [
         '*' => 'drop_if_empty',
         'name' => 'trim',
         'contacts.*.name' => 'trim|uppercase'
     ];
-    
+
     $data = [
         0 => '',
         'name' => '   Keoghan Litchfield   ',
@@ -86,9 +89,9 @@ To transform data, the `transform` method is used. It accepts an array (or colle
             ['name' => ''],
         ],
     ];
-    
+
     $result = $transformer->transform($data, $rules);
-    
+
     //    Outputs [
     //        'name' => 'Keoghan Litchfield',
     //        'contacts' => [
@@ -107,7 +110,7 @@ use Konsulting\Laravel\Transformer\Transform;
 $transform = new Transform($transformer);
 ```
 
-Rules may be called as methods on the `Transform` object, with the value to be transformed passed in as the first argument and any rule parameters as subsequent arguments. 
+Rules may be called as methods on the `Transform` object, with the value to be transformed passed in as the first argument and any rule parameters as subsequent arguments.
 
 ```php
 $transform->trim(' Some string to be trimmed   ');  // Outputs 'Some string to be trimmed'
@@ -116,7 +119,7 @@ $transform->regexReplace('testing', 'e', 'oa');     // Outputs 'toasting'
 ```
 
 Alternatively, rules may be passed via the `withRule()` and `withRules()` methods (for singular and multiple rules respectively).
-Rule parameters are passed either as separate arguments, or as an array. 
+Rule parameters are passed either as separate arguments, or as an array.
 
 ```php
 // Single rule
@@ -148,7 +151,7 @@ $transform->input(' hello ')
     ->regexReplace('hello', 'world')
     ->uppercase()
     ->get();
-    
+
 // Outputs 'WORLD'
 ```
 When the fluent API is used, the value is not passed as an argument to the rule methods (as it has already been set via `input()`).
@@ -160,7 +163,7 @@ $transform->input($input)
     ->withRule('trim')
     ->uppercase()
     ->get();
-    
+
 $transform->input($input)
     ->lowercase()
     ->withRules(['trim', 'uppercase'])
@@ -187,11 +190,11 @@ Parameter names are denoted by `<param>` and optional parameters by `[<param>]`.
 
 ##### Casting
 * `string` - convert to string, an array is transformed to a CSV or returns ‘’ for items that cannot be represented as a string.
-* `boolean` 
-* `array` 
+* `boolean`
+* `array`
 * `collection` - convert to `Illuminate\Support\Collection`
-* `json` 
-* `float` 
+* `json`
+* `float`
 * `integer`
 * `date_time:[timezone]`
 * `date_time_immutable:[timezone]`
@@ -258,7 +261,7 @@ class ContactRequestsController
             'message' => 'trim',
         ]);
 
-        $this->validate($request, [ 
+        $this->validate($request, [
             'name' => 'required',
         ]);
 
@@ -288,7 +291,7 @@ class ContactFormRequest extends FormRequest
     use TransformableRequest;
 
 	  // ... other methods including rules()
-	
+
 	  public function transformRules()
     {
         return [
@@ -350,7 +353,7 @@ With the above configuration, the postcode and email fields of every request sen
 Multiple transformer middlewares may be useful in a project: to achieve this, copy `laravel-transformer/src/Middleware/TransformRequest.php` to your project's `App/Http/Middleware` directory, and rename/edit as necessary. Each new middleware will have to be registered in the kernel.
 
 ## Contributing
-Contributions are welcome and will be fully credited. We will accept contributions by Pull Request. 
+Contributions are welcome and will be fully credited. We will accept contributions by Pull Request.
 
 Please:
 
