@@ -467,7 +467,7 @@ class Transformer
     {
         $this->data = $this->data
             ->reject(function ($value, $key) use ($field) {
-                return preg_match("/^{$field}/", $key);
+                return preg_match("/^{$field}$|^{$field}\./", $key);
             })
             ->merge(Arr::dot([$field => $result]));
     }

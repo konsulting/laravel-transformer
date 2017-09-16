@@ -188,6 +188,20 @@ class TransformerTest extends \PlainPhpTestCase
         $this->assertEquals($expected,
             $this->transformer()->transform($data, $transform)->toArray());
     }
+
+    /** @test */
+    function it_will_not_remove_other_fields_that_start_with_the_same_prefix_but_are_not_part_of_the_array()
+    {
+        $data = ['a' => '  trimmed  ', 'a_bc' => 'funky'];
+        $expected = ['a' => 'TRIMMED', 'a_bc' => 'FUNKY'];
+
+        $transform = [
+            '**' => 'trim|uppercase',
+        ];
+
+        $this->assertEquals($expected,
+            $this->transformer()->transform($data, $transform)->toArray());
+    }
 }
 
 
