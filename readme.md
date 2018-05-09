@@ -1,4 +1,4 @@
-# # Transformer
+# Transformer
 *A simple way to transform data, with helpers for transforming data in [Laravel](https://laravel.com) applications.*
 
 ## Installation
@@ -241,7 +241,6 @@ Use the facade to gain easy access to the Transformer wherever you are.
 #### Request Macro `transform`
 The Service Provider adds the transform Macro to the `Illuminate\Http\Request` class. This makes it simple to invoke the transformation on a request at any point. The method passes the request object back to allow chaining.
 
-~Using the Request::transform($rules) Macro~
 ```php
 // Example Controller
 
@@ -277,22 +276,22 @@ This trait makes the form request transform the data before validation occurs (w
 
 Rules for transformation are provided in the `transformRules` method.
 
-~Using the TransformingRequest Trait~
+Using the TransformingRequest Trait
 ```php
 // Form Request
 
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Konsulting\Laravel\Transformer\TransformableRequest;
+use Konsulting\Laravel\Transformer\TransformingRequest;
 
 class ContactFormRequest extends FormRequest
 {
-    use TransformableRequest;
+    use TransformingRequest;
 
 	  // ... other methods including rules()
 
-	  public function transformRules()
+    public function transformRules()
     {
         return [
             'name' => 'trim|uppercase',
