@@ -37,8 +37,8 @@
                 "Konsulting\\Laravel\\Transformer\\TransformerServiceProvider"
             ],
             "aliases": {
-                "Transformer": "Konsulting\\Laravel\\Transformer\\Transformer\\Facade",
-                "Transform": "Konsulting\\Laravel\\Transformer\\Transform\\Facade"
+                "Transformer": "Konsulting\\Laravel\\Transformer\\TransformerFacade",
+                "Transform": "Konsulting\\Laravel\\Transformer\\TransformFacade"
             }
         }
     }
