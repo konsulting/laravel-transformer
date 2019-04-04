@@ -1,4 +1,8 @@
 # Transformer
+
+[![Build Status](https://travis-ci.org/konsulting/laravel-transformer.svg?branch=master)](https://travis-ci.org/konsulting/laravel-transformer)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/konsulting/laravel-transformer/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/konsulting/laravel-transformer/?branch=master)
+
 *A simple way to transform data, with helpers for transforming data in [Laravel](https://laravel.com) applications.*
 
 ## Installation
