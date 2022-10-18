@@ -5,11 +5,11 @@ namespace Konsulting\Laravel\Transformer;
 use Konsulting\Laravel\Transformer\RulePacks\CoreRulePack;
 use Konsulting\Laravel\Transformer\RulePacks\RelatedFieldsRulePack;
 
-class RelatedFieldsPackTest extends \PlainPhpTestCase
+class RelatedfieldsPackTest extends \PlainPhpTestCase
 {
     protected $transformer;
 
-    function setUp()
+    function setUp(): void
     {
         $this->transformer = new Transformer([CoreRulePack::class, RelatedFieldsRulePack::class]);
     }

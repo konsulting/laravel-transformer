@@ -13,14 +13,14 @@
         }
     ],
     "require": {
-        "php": "^7.0",
+        "php": "^7.0||^8.0",
         "konsulting/laravel-extend-collections": "^0.1"
     },
     "require-dev": {
-        "phpunit/phpunit": "^6.0",
+        "phpunit/phpunit": "^6.0||^7.0||^8.0",
         "tightenco/collect": "^5.3",
-        "nesbot/carbon": "^1.22",
-        "orchestra/testbench": "^3.4"
+        "nesbot/carbon": "^1.22||^2.0",
+        "orchestra/testbench": "^3.4||^4.0||^5.0||^6.0||^7.0"
     },
     "autoload": {
         "psr-4": {
@@ -40,6 +40,11 @@
                 "Transformer": "Konsulting\\Laravel\\Transformer\\TransformerFacade",
                 "Transform": "Konsulting\\Laravel\\Transformer\\TransformFacade"
             }
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "kylekatarnls/update-helper": true
         }
     }
 }

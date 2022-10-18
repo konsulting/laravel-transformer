@@ -5,7 +5,7 @@ use Konsulting\Laravel\Transformer\Transformer;
 
 abstract class PlainPhpTestCase extends PHPUnit\Framework\TestCase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         \Konsulting\Laravel\load_collection_extensions();
     }
