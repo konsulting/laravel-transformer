@@ -37,13 +37,15 @@ class LaravelTest extends \LaravelTestCase {
     {
         $request = TestTransformingRequest::create('', 'POST', ['description' => '   abcdef    ']);
         $request->setContainer($this->app);
+        $request->validateResolved();
+
         $request->validate([
-            $request->transformRules()
-            ]);
+            'description' => '',
+        ]);
 
         $this->assertEquals(
             ['description' => 'ABCDEF'],
-            $request->transform(['*' => 'trim|uppercase'])->all()
+            $request->all()
         );
     }
 }
