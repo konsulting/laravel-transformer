@@ -8,7 +8,7 @@ class CoreRulePackTest extends \PlainPhpTestCase
 {
     protected $transformer;
 
-    function setUp()
+    function setUp(): void
     {
         $this->transformer = new Transformer(CoreRulePack::class);
     }

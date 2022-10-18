@@ -5,8 +5,8 @@ namespace Konsulting\Laravel\Transformer;
 use Closure;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Konsulting\Laravel\Transformer\RulePacks\RulePack;
 use Konsulting\Laravel\Transformer\Exceptions\InvalidRule;
+use Konsulting\Laravel\Transformer\RulePacks\RulePack;
 
 class Transformer
 {
@@ -76,8 +76,8 @@ class Transformer
     /**
      * Transformer constructor.
      *
-     * @param  array|string $rulePacks
-     * @param  array        $rules
+     * @param  array|string  $rulePacks
+     * @param  array  $rules
      */
     public function __construct($rulePacks = [], $rules = [])
     {
@@ -87,10 +87,10 @@ class Transformer
     /**
      * Set the rules that will be applied to the data.
      *
-     * @param array $rules
+     * @param  array  $rules
      * @return self
      */
-    public function setRules(array $rules = []) : self
+    public function setRules(array $rules = []): self
     {
         $this->rules = [];
 
@@ -104,10 +104,10 @@ class Transformer
     /**
      * Set the data that rules are to be applied to.
      *
-     * @param array $data
+     * @param  array  $data
      * @return self
      */
-    public function setData(array $data = []) : self
+    public function setData(array $data = []): self
     {
         $this->data = Collection::make($data)->dot();
         $this->dataKeysForRegex = $this->data->keys()->implode('|');
@@ -118,11 +118,11 @@ class Transformer
     /**
      * Perform the transformation.
      *
-     * @param array $data
-     * @param array $rules
+     * @param  array  $data
+     * @param  array  $rules
      * @return Collection
      */
-    public function transform(array $data, array $rules = null) : Collection
+    public function transform(array $data, array $rules = null): Collection
     {
         $this->setData($data);
 
@@ -140,7 +140,7 @@ class Transformer
      *
      * @return self
      */
-    protected function applyRules() : self
+    protected function applyRules(): self
     {
         $this->matchRulesToFields();
 
@@ -193,7 +193,7 @@ class Transformer
     /**
      * Indicate that the current loop should bail.
      *
-     * @param bool $bail
+     * @param  bool  $bail
      */
     public function bail(bool $bail = true)
     {
@@ -203,7 +203,7 @@ class Transformer
     /**
      * Indicate that the current field should be dropped.
      *
-     * @param bool $drop
+     * @param  bool  $drop
      */
     public function drop(bool $drop = true)
     {
@@ -215,9 +215,10 @@ class Transformer
      *
      * @param $rule
      * @return string
+     *
      * @throws InvalidRule
      */
-    protected function getRuleMethod($rule) : string
+    protected function getRuleMethod($rule): string
     {
         return 'rule' . str_replace('_', '', ucwords($rule, '_'));
     }
@@ -227,7 +228,7 @@ class Transformer
      *
      * @return bool
      */
-    protected function shouldBail() : bool
+    protected function shouldBail(): bool
     {
         return $this->bail;
     }
@@ -237,7 +238,7 @@ class Transformer
      *
      * @return bool
      */
-    protected function shouldDrop() : bool
+    protected function shouldDrop(): bool
     {
         return $this->drop;
     }
@@ -247,7 +248,7 @@ class Transformer
      *
      * @return self
      */
-    protected function matchRulesToFields() : self
+    protected function matchRulesToFields(): self
     {
         $this->matchedRules = [];
 
@@ -271,7 +272,7 @@ class Transformer
      * @param $fieldExpression
      * @return array
      */
-    protected function findMatchingFields($fieldExpression) : array
+    protected function findMatchingFields($fieldExpression): array
     {
         if ($fieldExpression == '**') {
             return array_fill_keys(explode('|', $this->dataKeysForRegex), []);
@@ -294,7 +295,7 @@ class Transformer
      * @param $set
      * @return array
      */
-    protected function parseRuleSet($set) : array
+    protected function parseRuleSet($set): array
     {
         $set = is_array($set) ? $set : explode('|', $set);
         $ruleSet = [];
@@ -312,7 +313,7 @@ class Transformer
      * @param $expression
      * @return mixed
      */
-    protected function parseRuleExpression($expression) : array
+    protected function parseRuleExpression($expression): array
     {
         if ($expression instanceof Closure) {
             return [$expression->bindTo($this)];
@@ -326,8 +327,7 @@ class Transformer
     }
 
     /**
-     * @param string $expression
-     *
+     * @param  string  $expression
      * @return array
      */
     protected function parseTextRuleExpression(string $expression): array
@@ -342,11 +342,11 @@ class Transformer
 
     /**
      * @param $rule
-     *
      * @return string
+     *
      * @throws InvalidRule
      */
-    protected function validateRule($rule) : string
+    protected function validateRule($rule): string
     {
         if (! isset($this->ruleMethods[$this->getRuleMethod($rule)])) {
             throw new InvalidRule($rule);
@@ -373,10 +373,10 @@ class Transformer
     /**
      * Register multiple rule packs.
      *
-     * @param array $rulePacks
+     * @param  array  $rulePacks
      * @return Transformer
      */
-    public function addRulePacks(array $rulePacks) : self
+    public function addRulePacks(array $rulePacks): self
     {
         foreach ($rulePacks as $rulePack) {
             $this->addRulePack(new $rulePack);
@@ -388,10 +388,10 @@ class Transformer
     /**
      * Register a rule pack.
      *
-     * @param RulePack|string $rulePack
+     * @param  RulePack|string  $rulePack
      * @return Transformer
      */
-    public function addRulePack($rulePack) : self
+    public function addRulePack($rulePack): self
     {
         $rulePackClass = $this->getClassName($rulePack);
         $rulePack = new $rulePackClass;
@@ -413,10 +413,10 @@ class Transformer
     /**
      * Check if the Transformer instance has a given rule pack.
      *
-     * @param RulePack|string $rulePack
+     * @param  RulePack|string  $rulePack
      * @return bool
      */
-    public function hasRulePack($rulePack) : bool
+    public function hasRulePack($rulePack): bool
     {
         $rulePackClass = $this->getClassName($rulePack);
 
@@ -428,7 +428,7 @@ class Transformer
      *
      * @return array
      */
-    public function rulePacks() : array
+    public function rulePacks(): array
     {
         return array_keys($this->rulePacks);
     }
@@ -436,10 +436,10 @@ class Transformer
     /**
      * Return class name if input is object, otherwise return input.
      *
-     * @param string|object $class
+     * @param  string|object  $class
      * @return string
      */
-    protected function getClassName($class) : string
+    protected function getClassName($class): string
     {
         return is_string($class) ? $class : get_class($class);
     }
@@ -460,8 +460,8 @@ class Transformer
      * Remove the current field from the data array, and merge in the new values. For dot-delimited arrays, remove all
      * fields that are being worked on, e.g. when a date array of day, month, year is being combined into a string.
      *
-     * @param string $field
-     * @param mixed  $result
+     * @param  string  $field
+     * @param  mixed  $result
      */
     protected function replaceDataValue($field, $result)
     {

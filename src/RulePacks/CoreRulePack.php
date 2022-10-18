@@ -9,8 +9,7 @@ class CoreRulePack extends RulePack
     /**
      * Convert empty values to null.
      *
-     * @param mixed $value
-     *
+     * @param  mixed  $value
      * @return mixed
      */
     public function ruleNullIfEmpty($value)
@@ -21,8 +20,7 @@ class CoreRulePack extends RulePack
     /**
      * Convert empty string values to null.
      *
-     * @param mixed $value
-     *
+     * @param  mixed  $value
      * @return mixed
      */
     public function ruleNullIfEmptyString($value)
@@ -34,7 +32,6 @@ class CoreRulePack extends RulePack
      * Stop processing rules if null.
      *
      * @param $value
-     *
      * @return mixed
      */
     public function ruleBailIfNull($value)
@@ -48,7 +45,6 @@ class CoreRulePack extends RulePack
      * Return null if empty, and stop processing rules.
      *
      * @param $value
-     *
      * @return null
      */
     public function ruleReturnNullIfEmpty($value)
@@ -60,7 +56,6 @@ class CoreRulePack extends RulePack
      * Return null if empty string, and stop processing rules.
      *
      * @param $value
-     *
      * @return null
      */
     public function ruleReturnNullIfEmptyString($value)
@@ -72,7 +67,6 @@ class CoreRulePack extends RulePack
      * Drop field if value is null.
      *
      * @param $value
-     *
      * @return null
      */
     public function ruleDropIfNull($value)
@@ -86,7 +80,6 @@ class CoreRulePack extends RulePack
      * Drop field if value equates to empty.
      *
      * @param $value
-     *
      * @return null
      */
     public function ruleDropIfEmpty($value)
@@ -98,7 +91,6 @@ class CoreRulePack extends RulePack
      * Drop field if value equates to empty string.
      *
      * @param $value
-     *
      * @return null
      */
     public function ruleDropIfEmptyString($value)
@@ -109,9 +101,8 @@ class CoreRulePack extends RulePack
     /**
      * Trim surrounding whitespace.
      *
-     * @param        $value
-     * @param string $trim
-     *
+     * @param  $value
+     * @param  string  $trim
      * @return string
      */
     public function ruleTrim($value, $trim = null)
@@ -123,7 +114,6 @@ class CoreRulePack extends RulePack
 
     /**
      * @param $value
-     *
      * @return string
      */
     public function ruleUppercase($value)
@@ -133,7 +123,6 @@ class CoreRulePack extends RulePack
 
     /**
      * @param $value
-     *
      * @return string
      */
     public function ruleLowercase($value)

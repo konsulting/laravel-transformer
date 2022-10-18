@@ -6,8 +6,8 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 use Konsulting\Laravel\Transformer\RulePacks\CoreRulePack;
 
-class LaravelTest extends \LaravelTestCase
-{
+class LaravelTest extends \LaravelTestCase {
+
     /** @test */
     function the_transformer_is_available_through_the_facade()
     {
@@ -37,7 +37,11 @@ class LaravelTest extends \LaravelTestCase
     {
         $request = TestTransformingRequest::create('', 'POST', ['description' => '   abcdef    ']);
         $request->setContainer($this->app);
-        $request->validate();
+        $request->validateResolved();
+
+        $request->validate([
+            'description' => '',
+        ]);
 
         $this->assertEquals(
             ['description' => 'ABCDEF'],
@@ -46,8 +50,8 @@ class LaravelTest extends \LaravelTestCase
     }
 }
 
-class TestTransformingRequest extends FormRequest
-{
+class TestTransformingRequest extends FormRequest {
+
     use TransformingRequest;
 
     public function authorize()

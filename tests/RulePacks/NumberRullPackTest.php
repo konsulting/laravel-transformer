@@ -4,11 +4,11 @@ namespace Konsulting\Laravel\Transformer;
 
 use Konsulting\Laravel\Transformer\RulePacks\NumberRulePack;
 
-class NumberPackTest extends \PlainPhpTestCase
+class NumberRullPackTest extends \PlainPhpTestCase
 {
     protected $transformer;
 
-    function setUp()
+    function setUp(): void
     {
         $this->transformer = new Transformer(NumberRulePack::class);
     }
