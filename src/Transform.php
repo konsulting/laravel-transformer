@@ -14,7 +14,7 @@ class Transform
     /**
      * Receive Transformer instance.
      *
-     * @param Transformer $transformer
+     * @param  Transformer  $transformer
      */
     public function __construct(Transformer $transformer)
     {
@@ -40,10 +40,10 @@ class Transform
     /**
      * Return a fluent Transform instance and set the data to be transformed.
      *
-     * @param mixed $input
+     * @param  mixed  $input
      * @return TransformFluent
      */
-    public function input($input) : TransformFluent
+    public function input($input): TransformFluent
     {
         return (new TransformFluent($this))->input($input);
     }
@@ -53,8 +53,8 @@ class Transform
     /**
      * Specify the rules to apply to the transformation.
      *
-     * @param       $value
-     * @param array $rules
+     * @param  $value
+     * @param  array  $rules
      * @return mixed
      */
     public function withRules($value, $rules)
@@ -77,9 +77,9 @@ class Transform
     /**
      * Specify a rule to apply to the transformation.
      *
-     * @param        $data
-     * @param string $rule
-     * @param array  $arguments
+     * @param  $data
+     * @param  string  $rule
+     * @param  array  $arguments
      * @return mixed
      */
     public function withRule($data, $rule, ...$arguments)
@@ -94,11 +94,11 @@ class Transform
     /**
      * Format the rule and arguments for use with the transformer.
      *
-     * @param string $rule
-     * @param array  $arguments
+     * @param  string  $rule
+     * @param  array  $arguments
      * @return string
      */
-    protected function constructRule($rule, $arguments = []) : string
+    protected function constructRule($rule, $arguments = []): string
     {
         return $rule . (! empty($arguments) ? ':' . implode(',', $arguments) : '');
     }
@@ -106,8 +106,8 @@ class Transform
     /**
      * Allow transformer rules to be called as methods.
      *
-     * @param string $method
-     * @param array  $args
+     * @param  string  $method
+     * @param  array  $args
      * @return mixed
      */
     public function __call(string $method, array $args)
@@ -118,10 +118,10 @@ class Transform
     /**
      * Check if an array has sequential integer keys (i.e. it is not associative).
      *
-     * @param array $arr
+     * @param  array  $arr
      * @return bool
      */
-    protected function isSequentialArray(array $arr) : bool
+    protected function isSequentialArray(array $arr): bool
     {
         return $arr !== [] && array_keys($arr) === range(0, count($arr) - 1);
     }
