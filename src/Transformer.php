@@ -122,7 +122,7 @@ class Transformer
      * @param  array  $rules
      * @return Collection
      */
-    public function transform(array $data, array $rules = null): Collection
+    public function transform(array $data, ?array $rules = null): Collection
     {
         $this->setData($data);
 
@@ -154,7 +154,7 @@ class Transformer
     /**
      * Execute the array of rules.
      *
-     * @param $field
+     * @param  $field
      */
     protected function executeRules($field)
     {
@@ -213,7 +213,7 @@ class Transformer
     /**
      * Construct the method name to call, given the name of the rule.
      *
-     * @param $rule
+     * @param  $rule
      * @return string
      *
      * @throws InvalidRule
@@ -256,8 +256,8 @@ class Transformer
             foreach ($this->findMatchingFields($fieldExpression) as $fieldName => $indices) {
                 $this->matchedRules[$fieldName][] = [
                     'fieldExpression' => $fieldExpression,
-                    'indices'         => $indices,
-                    'set'             => $ruleSet,
+                    'indices' => $indices,
+                    'set' => $ruleSet,
                 ];
             }
         }
@@ -269,7 +269,7 @@ class Transformer
      * Parse fieldExpression to match all the fields in the data we need to transform. It passes back an array of field
      * names with a set of 'indices' associated to each field name (these are where we match wildcards).
      *
-     * @param $fieldExpression
+     * @param  $fieldExpression
      * @return array
      */
     protected function findMatchingFields($fieldExpression): array
@@ -292,7 +292,7 @@ class Transformer
     /**
      * Return a key/value array of rules/parameters.
      *
-     * @param $set
+     * @param  $set
      * @return array
      */
     protected function parseRuleSet($set): array
@@ -310,7 +310,7 @@ class Transformer
     /**
      * Split a rule expression into the rule name and any parameters present.
      *
-     * @param $expression
+     * @param  $expression
      * @return mixed
      */
     protected function parseRuleExpression($expression): array
@@ -341,7 +341,7 @@ class Transformer
     }
 
     /**
-     * @param $rule
+     * @param  $rule
      * @return string
      *
      * @throws InvalidRule
@@ -356,8 +356,8 @@ class Transformer
     }
 
     /**
-     * @param $name
-     * @param $parameters
+     * @param  $name
+     * @param  $parameters
      * @return mixed
      */
     public function __call($name, $parameters)
@@ -448,7 +448,7 @@ class Transformer
      * Parse the parameters that have been passed in and try to find an associated value in the current data
      * collection, by replacing wildcards with the indices that are kept for the current loop.
      *
-     * @param $parameter
+     * @param  $parameter
      * @return mixed
      */
     public function getValue($parameter)

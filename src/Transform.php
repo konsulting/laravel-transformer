@@ -24,9 +24,9 @@ class Transform
     /**
      * Perform the transformation.
      *
-     * @param $data
-     * @param $rule
-     * @param $arguments
+     * @param  $data
+     * @param  $rule
+     * @param  $arguments
      * @return mixed
      */
     protected function transform($data, $rule, $arguments)

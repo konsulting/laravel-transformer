@@ -31,7 +31,7 @@ class CoreRulePack extends RulePack
     /**
      * Stop processing rules if null.
      *
-     * @param $value
+     * @param  $value
      * @return mixed
      */
     public function ruleBailIfNull($value)
@@ -44,7 +44,7 @@ class CoreRulePack extends RulePack
     /**
      * Return null if empty, and stop processing rules.
      *
-     * @param $value
+     * @param  $value
      * @return null
      */
     public function ruleReturnNullIfEmpty($value)
@@ -55,7 +55,7 @@ class CoreRulePack extends RulePack
     /**
      * Return null if empty string, and stop processing rules.
      *
-     * @param $value
+     * @param  $value
      * @return null
      */
     public function ruleReturnNullIfEmptyString($value)
@@ -66,7 +66,7 @@ class CoreRulePack extends RulePack
     /**
      * Drop field if value is null.
      *
-     * @param $value
+     * @param  $value
      * @return null
      */
     public function ruleDropIfNull($value)
@@ -79,7 +79,7 @@ class CoreRulePack extends RulePack
     /**
      * Drop field if value equates to empty.
      *
-     * @param $value
+     * @param  $value
      * @return null
      */
     public function ruleDropIfEmpty($value)
@@ -90,7 +90,7 @@ class CoreRulePack extends RulePack
     /**
      * Drop field if value equates to empty string.
      *
-     * @param $value
+     * @param  $value
      * @return null
      */
     public function ruleDropIfEmptyString($value)
@@ -113,7 +113,7 @@ class CoreRulePack extends RulePack
     }
 
     /**
-     * @param $value
+     * @param  $value
      * @return string
      */
     public function ruleUppercase($value)
@@ -122,7 +122,7 @@ class CoreRulePack extends RulePack
     }
 
     /**
-     * @param $value
+     * @param  $value
      * @return string
      */
     public function ruleLowercase($value)
