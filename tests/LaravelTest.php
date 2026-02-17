@@ -7,16 +7,16 @@ use Illuminate\Http\Request;
 use Konsulting\Laravel\Transformer\RulePacks\CoreRulePack;
 use PHPUnit\Framework\Attributes\Test;
 
-class LaravelTest extends \LaravelTestCase {
-
+class LaravelTest extends \LaravelTestCase
+{
     #[Test]
-    function the_transformer_is_available_through_the_facade()
+    public function the_transformer_is_available_through_the_facade()
     {
         $this->assertTrue(\Transformer::hasRulePack(CoreRulePack::class));
     }
 
     #[Test]
-    function a_request_can_transform()
+    public function a_request_can_transform()
     {
         $request = Request::create('', 'POST', ['description' => '   abcdef   ']);
 
@@ -34,7 +34,7 @@ class LaravelTest extends \LaravelTestCase {
     }
 
     #[Test]
-    function a_form_request_will_be_transformed()
+    public function a_form_request_will_be_transformed()
     {
         $request = TestTransformingRequest::create('', 'POST', ['description' => '   abcdef    ']);
         $request->setContainer($this->app);
@@ -51,8 +51,8 @@ class LaravelTest extends \LaravelTestCase {
     }
 }
 
-class TestTransformingRequest extends FormRequest {
-
+class TestTransformingRequest extends FormRequest
+{
     use TransformingRequest;
 
     public function authorize()

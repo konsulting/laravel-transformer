@@ -15,10 +15,6 @@ class TransformFluent
 
     /**
      * Allow transformer rules to be called as methods.
-     *
-     * @param  string  $method
-     * @param  array  $arguments
-     * @return self
      */
     public function __call(string $method, array $arguments): self
     {
@@ -31,7 +27,6 @@ class TransformFluent
      * Set the input to be transformed.
      *
      * @param  mixed  $input
-     * @return self
      */
     public function input($input): self
     {

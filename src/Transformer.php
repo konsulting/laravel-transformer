@@ -86,9 +86,6 @@ class Transformer
 
     /**
      * Set the rules that will be applied to the data.
-     *
-     * @param  array  $rules
-     * @return self
      */
     public function setRules(array $rules = []): self
     {
@@ -103,9 +100,6 @@ class Transformer
 
     /**
      * Set the data that rules are to be applied to.
-     *
-     * @param  array  $data
-     * @return self
      */
     public function setData(array $data = []): self
     {
@@ -117,10 +111,6 @@ class Transformer
 
     /**
      * Perform the transformation.
-     *
-     * @param  array  $data
-     * @param  array  $rules
-     * @return Collection
      */
     public function transform(array $data, ?array $rules = null): Collection
     {
@@ -137,8 +127,6 @@ class Transformer
 
     /**
      * Apply the matched rules to the input.
-     *
-     * @return self
      */
     protected function applyRules(): self
     {
@@ -153,8 +141,6 @@ class Transformer
 
     /**
      * Execute the array of rules.
-     *
-     * @param  $field
      */
     protected function executeRules($field)
     {
@@ -192,8 +178,6 @@ class Transformer
 
     /**
      * Indicate that the current loop should bail.
-     *
-     * @param  bool  $bail
      */
     public function bail(bool $bail = true)
     {
@@ -202,8 +186,6 @@ class Transformer
 
     /**
      * Indicate that the current field should be dropped.
-     *
-     * @param  bool  $drop
      */
     public function drop(bool $drop = true)
     {
@@ -213,20 +195,16 @@ class Transformer
     /**
      * Construct the method name to call, given the name of the rule.
      *
-     * @param  $rule
-     * @return string
      *
      * @throws InvalidRule
      */
     protected function getRuleMethod($rule): string
     {
-        return 'rule' . str_replace('_', '', ucwords($rule, '_'));
+        return 'rule'.str_replace('_', '', ucwords((string) $rule, '_'));
     }
 
     /**
      * Check if the current loop should bail.
-     *
-     * @return bool
      */
     protected function shouldBail(): bool
     {
@@ -235,8 +213,6 @@ class Transformer
 
     /**
      * Check if the current field should be dropped.
-     *
-     * @return bool
      */
     protected function shouldDrop(): bool
     {
@@ -245,8 +221,6 @@ class Transformer
 
     /**
      * Match the loaded rule to fields in the data, based on the $field expression provided.
-     *
-     * @return self
      */
     protected function matchRulesToFields(): self
     {
@@ -268,9 +242,6 @@ class Transformer
     /**
      * Parse fieldExpression to match all the fields in the data we need to transform. It passes back an array of field
      * names with a set of 'indices' associated to each field name (these are where we match wildcards).
-     *
-     * @param  $fieldExpression
-     * @return array
      */
     protected function findMatchingFields($fieldExpression): array
     {
@@ -291,13 +262,10 @@ class Transformer
 
     /**
      * Return a key/value array of rules/parameters.
-     *
-     * @param  $set
-     * @return array
      */
     protected function parseRuleSet($set): array
     {
-        $set = is_array($set) ? $set : explode('|', $set);
+        $set = is_array($set) ? $set : explode('|', (string) $set);
         $ruleSet = [];
 
         foreach ($set as $expression) {
@@ -310,7 +278,6 @@ class Transformer
     /**
      * Split a rule expression into the rule name and any parameters present.
      *
-     * @param  $expression
      * @return mixed
      */
     protected function parseRuleExpression($expression): array
@@ -326,10 +293,6 @@ class Transformer
         return $this->parseTextRuleExpression($expression);
     }
 
-    /**
-     * @param  string  $expression
-     * @return array
-     */
     protected function parseTextRuleExpression(string $expression): array
     {
         $split = explode(':', $expression, 2);
@@ -341,9 +304,6 @@ class Transformer
     }
 
     /**
-     * @param  $rule
-     * @return string
-     *
      * @throws InvalidRule
      */
     protected function validateRule($rule): string
@@ -356,13 +316,11 @@ class Transformer
     }
 
     /**
-     * @param  $name
-     * @param  $parameters
      * @return mixed
      */
     public function __call($name, $parameters)
     {
-        if (substr($name, 0, 4) == 'rule' && $this->ruleMethods[$name]) {
+        if (str_starts_with((string) $name, 'rule') && $this->ruleMethods[$name]) {
             $value = array_shift($parameters);
             $rulePack = $this->rulePacks[$this->ruleMethods[$name]];
 
@@ -372,9 +330,6 @@ class Transformer
 
     /**
      * Register multiple rule packs.
-     *
-     * @param  array  $rulePacks
-     * @return Transformer
      */
     public function addRulePacks(array $rulePacks): self
     {
@@ -389,7 +344,6 @@ class Transformer
      * Register a rule pack.
      *
      * @param  RulePack|string  $rulePack
-     * @return Transformer
      */
     public function addRulePack($rulePack): self
     {
@@ -397,7 +351,7 @@ class Transformer
         $rulePack = new $rulePackClass;
 
         if (! ($rulePack instanceof RulePack)) {
-            throw new \UnexpectedValueException('RulePack must be an instance of ' . RulePack::class);
+            throw new \UnexpectedValueException('RulePack must be an instance of '.RulePack::class);
         }
 
         if (! $this->hasRulePack($rulePack)) {
@@ -414,7 +368,6 @@ class Transformer
      * Check if the Transformer instance has a given rule pack.
      *
      * @param  RulePack|string  $rulePack
-     * @return bool
      */
     public function hasRulePack($rulePack): bool
     {
@@ -425,8 +378,6 @@ class Transformer
 
     /**
      * Return an array of all loaded rule packs.
-     *
-     * @return array
      */
     public function rulePacks(): array
     {
@@ -437,18 +388,16 @@ class Transformer
      * Return class name if input is object, otherwise return input.
      *
      * @param  string|object  $class
-     * @return string
      */
     protected function getClassName($class): string
     {
-        return is_string($class) ? $class : get_class($class);
+        return is_string($class) ? $class : $class::class;
     }
 
     /**
      * Parse the parameters that have been passed in and try to find an associated value in the current data
      * collection, by replacing wildcards with the indices that are kept for the current loop.
      *
-     * @param  $parameter
      * @return mixed
      */
     public function getValue($parameter)
@@ -466,9 +415,7 @@ class Transformer
     protected function replaceDataValue($field, $result)
     {
         $this->data = $this->data
-            ->reject(function ($value, $key) use ($field) {
-                return preg_match("/^{$field}$|^{$field}\./", $key);
-            })
+            ->reject(fn ($value, $key) => preg_match("/^{$field}$|^{$field}\./", (string) $key))
             ->merge(Arr::dot([$field => $result]));
     }
 }

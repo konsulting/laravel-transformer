@@ -12,7 +12,7 @@ class TransformerServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__ . '/../config/transformer.php' => config_path('transformer.php'),
+            __DIR__.'/../config/transformer.php' => config_path('transformer.php'),
         ], 'config');
     }
 
@@ -21,7 +21,7 @@ class TransformerServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/transformer.php', 'transformer');
+        $this->mergeConfigFrom(__DIR__.'/../config/transformer.php', 'transformer');
 
         $this->checkForCollectionExtensions();
         $this->registerTransformer();
@@ -35,7 +35,7 @@ class TransformerServiceProvider extends ServiceProvider
     {
         if (! Arr::hasMacro('fromDot') || ! Collection::hasMacro('fromDot')) {
             throw new \ErrorException(
-                'Please register the CollectionsServiceProvider from the laravel-extend-collections package. ' .
+                'Please register the CollectionsServiceProvider from the laravel-extend-collections package. '.
                 'Transformer requires the fromDot method for Illuminate Support Arr and Collection.'
             );
         }
@@ -46,9 +46,7 @@ class TransformerServiceProvider extends ServiceProvider
      */
     public function registerTransformer()
     {
-        $this->app->singleton(Transformer::class, function () {
-            return new Transformer(config('transformer.rule_packs', []));
-        });
+        $this->app->singleton(Transformer::class, fn () => new Transformer(config('transformer.rule_packs', [])));
     }
 
     public function registerRequestTransformMacro()

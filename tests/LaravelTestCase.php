@@ -1,9 +1,9 @@
 <?php
 
-use Orchestra\Testbench\TestCase;
 use Konsulting\Laravel\CollectionsServiceProvider;
 use Konsulting\Laravel\Transformer\TransformerFacade;
 use Konsulting\Laravel\Transformer\TransformerServiceProvider;
+use Orchestra\Testbench\TestCase;
 
 abstract class LaravelTestCase extends TestCase
 {

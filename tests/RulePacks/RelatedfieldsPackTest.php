@@ -10,13 +10,13 @@ class RelatedfieldsPackTest extends \PlainPhpTestCase
 {
     protected $transformer;
 
-    function setUp(): void
+    protected function setUp(): void
     {
         $this->transformer = new Transformer([CoreRulePack::class, RelatedFieldsRulePack::class]);
     }
 
     #[Test]
-    function it_will_return_null_without_another_field()
+    public function it_will_return_null_without_another_field()
     {
         $data = ['a' => 'name'];
         $expected = ['a' => null];
@@ -25,7 +25,7 @@ class RelatedfieldsPackTest extends \PlainPhpTestCase
     }
 
     #[Test]
-    function it_will_drop_without_another_field()
+    public function it_will_drop_without_another_field()
     {
         $data = ['a' => 'name'];
         $expected = [];
@@ -34,7 +34,7 @@ class RelatedfieldsPackTest extends \PlainPhpTestCase
     }
 
     #[Test]
-    function it_will_bail_without_another_field()
+    public function it_will_bail_without_another_field()
     {
         $data = ['a' => 'name'];
         $expected = ['a' => 'name'];
@@ -43,7 +43,7 @@ class RelatedfieldsPackTest extends \PlainPhpTestCase
     }
 
     #[Test]
-    function it_will_return_null_with_another_field()
+    public function it_will_return_null_with_another_field()
     {
         $data = ['a' => 'name', 'b' => 'something'];
         $expected = ['a' => null, 'b' => 'something'];
@@ -52,7 +52,7 @@ class RelatedfieldsPackTest extends \PlainPhpTestCase
     }
 
     #[Test]
-    function it_will_drop_with_another_field()
+    public function it_will_drop_with_another_field()
     {
         $data = ['a' => 'name', 'b' => 'something'];
         $expected = ['b' => 'something'];
@@ -61,7 +61,7 @@ class RelatedfieldsPackTest extends \PlainPhpTestCase
     }
 
     #[Test]
-    function it_will_bail_with_another_field()
+    public function it_will_bail_with_another_field()
     {
         $data = ['a' => 'name', 'b' => 'something'];
         $expected = ['a' => 'name', 'b' => 'something'];

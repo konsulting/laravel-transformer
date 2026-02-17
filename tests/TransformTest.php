@@ -130,7 +130,7 @@ class TransformTest extends \PlainPhpTestCase
     {
         $rules = [
             'regex_replace' => ['e', 'oa'],
-            'uppercase'     => []
+            'uppercase' => [],
         ];
         $result = $this->transform()->input('test')->withRules($rules)->get();
 

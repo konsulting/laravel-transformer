@@ -17,9 +17,7 @@ abstract class RulePack
 
     public function provides()
     {
-        return array_filter(get_class_methods($this), function ($method) {
-            return substr($method, 0, 4) == 'rule';
-        });
+        return array_filter(get_class_methods($this), fn ($method) => str_starts_with((string) $method, 'rule'));
     }
 
     /*

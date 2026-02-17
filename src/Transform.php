@@ -13,8 +13,6 @@ class Transform
 
     /**
      * Receive Transformer instance.
-     *
-     * @param  Transformer  $transformer
      */
     public function __construct(Transformer $transformer)
     {
@@ -24,9 +22,6 @@ class Transform
     /**
      * Perform the transformation.
      *
-     * @param  $data
-     * @param  $rule
-     * @param  $arguments
      * @return mixed
      */
     protected function transform($data, $rule, $arguments)
@@ -41,7 +36,6 @@ class Transform
      * Return a fluent Transform instance and set the data to be transformed.
      *
      * @param  mixed  $input
-     * @return TransformFluent
      */
     public function input($input): TransformFluent
     {
@@ -53,7 +47,6 @@ class Transform
     /**
      * Specify the rules to apply to the transformation.
      *
-     * @param  $value
      * @param  array  $rules
      * @return mixed
      */
@@ -77,7 +70,6 @@ class Transform
     /**
      * Specify a rule to apply to the transformation.
      *
-     * @param  $data
      * @param  string  $rule
      * @param  array  $arguments
      * @return mixed
@@ -96,18 +88,15 @@ class Transform
      *
      * @param  string  $rule
      * @param  array  $arguments
-     * @return string
      */
     protected function constructRule($rule, $arguments = []): string
     {
-        return $rule . (! empty($arguments) ? ':' . implode(',', $arguments) : '');
+        return $rule.(! empty($arguments) ? ':'.implode(',', $arguments) : '');
     }
 
     /**
      * Allow transformer rules to be called as methods.
      *
-     * @param  string  $method
-     * @param  array  $args
      * @return mixed
      */
     public function __call(string $method, array $args)
@@ -117,9 +106,6 @@ class Transform
 
     /**
      * Check if an array has sequential integer keys (i.e. it is not associative).
-     *
-     * @param  array  $arr
-     * @return bool
      */
     protected function isSequentialArray(array $arr): bool
     {

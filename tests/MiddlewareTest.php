@@ -9,11 +9,11 @@ use PHPUnit\Framework\Attributes\Test;
 class MiddlewareTest extends \LaravelTestCase
 {
     #[Test]
-    function it_trims_and_nullifies_empty_strings_request_data()
+    public function it_trims_and_nullifies_empty_strings_request_data()
     {
         $request = Request::create('', 'POST', ['name' => '   a b c     ', 'email' => '', 'address' => '     ']);
 
-        (new TransformRequest)->handle($request, function ($request) {
+        (new TransformRequest)->handle($request, function ($request): void {
             $this->assertEquals('a b c', $request->input('name'));
             $this->assertNull($request->input('email'));
             $this->assertNull($request->input('address'));

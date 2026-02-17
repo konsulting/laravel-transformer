@@ -31,7 +31,6 @@ class CoreRulePack extends RulePack
     /**
      * Stop processing rules if null.
      *
-     * @param  $value
      * @return mixed
      */
     public function ruleBailIfNull($value)
@@ -44,7 +43,6 @@ class CoreRulePack extends RulePack
     /**
      * Return null if empty, and stop processing rules.
      *
-     * @param  $value
      * @return null
      */
     public function ruleReturnNullIfEmpty($value)
@@ -55,7 +53,6 @@ class CoreRulePack extends RulePack
     /**
      * Return null if empty string, and stop processing rules.
      *
-     * @param  $value
      * @return null
      */
     public function ruleReturnNullIfEmptyString($value)
@@ -66,7 +63,6 @@ class CoreRulePack extends RulePack
     /**
      * Drop field if value is null.
      *
-     * @param  $value
      * @return null
      */
     public function ruleDropIfNull($value)
@@ -79,7 +75,6 @@ class CoreRulePack extends RulePack
     /**
      * Drop field if value equates to empty.
      *
-     * @param  $value
      * @return null
      */
     public function ruleDropIfEmpty($value)
@@ -90,7 +85,6 @@ class CoreRulePack extends RulePack
     /**
      * Drop field if value equates to empty string.
      *
-     * @param  $value
      * @return null
      */
     public function ruleDropIfEmptyString($value)
@@ -101,7 +95,6 @@ class CoreRulePack extends RulePack
     /**
      * Trim surrounding whitespace.
      *
-     * @param  $value
      * @param  string  $trim
      * @return string
      */
@@ -113,28 +106,26 @@ class CoreRulePack extends RulePack
     }
 
     /**
-     * @param  $value
      * @return string
      */
     public function ruleUppercase($value)
     {
-        return strtoupper($this->ruleString($value));
+        return strtoupper((string) $this->ruleString($value));
     }
 
     /**
-     * @param  $value
      * @return string
      */
     public function ruleLowercase($value)
     {
-        return strtolower($this->ruleString($value));
+        return strtolower((string) $this->ruleString($value));
     }
 
     public function ruleString($value)
     {
         try {
             return is_array($value) ? str_putcsv($value) : (string) $value;
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return '';
         }
     }
@@ -161,7 +152,7 @@ class CoreRulePack extends RulePack
 
     public function ruleFloat($value)
     {
-        return (float) preg_replace('/[^\d,.]/', '', $value);
+        return (float) preg_replace('/[^\d,.]/', '', (string) $value);
     }
 
     public function ruleInteger($value)
@@ -189,7 +180,7 @@ class CoreRulePack extends RulePack
 
     public function ruleRegexReplace($value, $regex = '*', $replace = '')
     {
-        return preg_replace('/' . $regex . '/', $replace, $value);
+        return preg_replace('/'.$regex.'/', (string) $replace, (string) $value);
     }
 
     /*
@@ -197,7 +188,7 @@ class CoreRulePack extends RulePack
      */
     public function ruleNumeric($value)
     {
-        return preg_replace('/[^\pN]/u', '', $value);
+        return preg_replace('/[^\pN]/u', '', (string) $value);
     }
 
     /*
@@ -205,7 +196,7 @@ class CoreRulePack extends RulePack
      */
     public function ruleAlpha($value)
     {
-        return preg_replace('/[^\pL\pM\s]/u', '', $value);
+        return preg_replace('/[^\pL\pM\s]/u', '', (string) $value);
     }
 
     /*
@@ -213,7 +204,7 @@ class CoreRulePack extends RulePack
      */
     public function ruleAlphaDash($value)
     {
-        return preg_replace('/[^\pL\pM\s_-]/u', '', $value);
+        return preg_replace('/[^\pL\pM\s_-]/u', '', (string) $value);
     }
 
     /*
@@ -221,7 +212,7 @@ class CoreRulePack extends RulePack
      */
     public function ruleAlphaNum($value)
     {
-        return preg_replace('/[^\pL\pM\pN\s]/u', '', $value);
+        return preg_replace('/[^\pL\pM\pN\s]/u', '', (string) $value);
     }
 
     /*
@@ -229,7 +220,7 @@ class CoreRulePack extends RulePack
      */
     public function ruleAlphaNumDash($value)
     {
-        return preg_replace('/[^\pL\pM\pN\s_-]/u', '', $value);
+        return preg_replace('/[^\pL\pM\pN\s_-]/u', '', (string) $value);
     }
 
     /*

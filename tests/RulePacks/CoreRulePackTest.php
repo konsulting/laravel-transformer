@@ -9,13 +9,13 @@ class CoreRulePackTest extends \PlainPhpTestCase
 {
     protected $transformer;
 
-    function setUp(): void
+    protected function setUp(): void
     {
         $this->transformer = new Transformer(CoreRulePack::class);
     }
 
     #[Test]
-    function the_alpha_rule_removes_non_alphabetic_characters()
+    public function the_alpha_rule_removes_non_alphabetic_characters()
     {
         $data = ['a' => 'One 2 thr$ee 4-FIVE'];
         $expected = ['a' => 'One  three FIVE'];
@@ -24,7 +24,7 @@ class CoreRulePackTest extends \PlainPhpTestCase
     }
 
     #[Test]
-    function the_alpha_dash_rule_removes_non_alphabetic_and_non_dash_characters()
+    public function the_alpha_dash_rule_removes_non_alphabetic_and_non_dash_characters()
     {
         $data = ['a' => 'One 2 thr$ee 4-FIVE'];
         $expected = ['a' => 'One  three -FIVE'];
