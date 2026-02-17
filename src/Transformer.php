@@ -151,7 +151,7 @@ class Transformer
             $this->loopIndices = $set['indices'];
 
             foreach ($set['set'] as $rule => $parameters) {
-                $input = $this->data->dotGet($field);
+                $input = $this->data->fromDot($field)->first();
 
                 if ($parameters instanceof Closure) {
                     $result = $parameters($input);
