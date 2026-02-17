@@ -91,7 +91,7 @@ class Transform
      */
     protected function constructRule($rule, $arguments = []): string
     {
-        return $rule.(! empty($arguments) ? ':'.implode(',', $arguments) : '');
+        return $rule . (! empty($arguments) ? ':' . implode(',', $arguments) : '');
     }
 
     /**

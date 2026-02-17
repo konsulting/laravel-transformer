@@ -200,7 +200,7 @@ class Transformer
      */
     protected function getRuleMethod($rule): string
     {
-        return 'rule'.str_replace('_', '', ucwords((string) $rule, '_'));
+        return 'rule' . str_replace('_', '', ucwords((string) $rule, '_'));
     }
 
     /**
@@ -351,7 +351,7 @@ class Transformer
         $rulePack = new $rulePackClass;
 
         if (! ($rulePack instanceof RulePack)) {
-            throw new \UnexpectedValueException('RulePack must be an instance of '.RulePack::class);
+            throw new \UnexpectedValueException('RulePack must be an instance of ' . RulePack::class);
         }
 
         if (! $this->hasRulePack($rulePack)) {
