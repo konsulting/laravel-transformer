@@ -3,6 +3,7 @@
 namespace Konsulting\Laravel\Transformer;
 
 use Konsulting\Laravel\Transformer\RulePacks\CoreRulePack;
+use PHPUnit\Framework\Attributes\Test;
 
 class CoreRulePackTest extends \PlainPhpTestCase
 {
@@ -13,7 +14,7 @@ class CoreRulePackTest extends \PlainPhpTestCase
         $this->transformer = new Transformer(CoreRulePack::class);
     }
 
-    /** @test */
+    #[Test]
     function the_alpha_rule_removes_non_alphabetic_characters()
     {
         $data = ['a' => 'One 2 thr$ee 4-FIVE'];
@@ -22,7 +23,7 @@ class CoreRulePackTest extends \PlainPhpTestCase
         $this->assertEquals($expected, $this->transformer->transform($data, ['a' => 'alpha'])->toArray());
     }
 
-    /** @test */
+    #[Test]
     function the_alpha_dash_rule_removes_non_alphabetic_and_non_dash_characters()
     {
         $data = ['a' => 'One 2 thr$ee 4-FIVE'];
@@ -31,19 +32,19 @@ class CoreRulePackTest extends \PlainPhpTestCase
         $this->assertEquals($expected, $this->transformer->transform($data, ['a' => 'alphaDash'])->toArray());
     }
 
-    /** @test **/
+    #[Test]
     public function the_null_if_empty_string_works()
     {
         $this->assertEquals(['a' => null], $this->transformer->transform(['a' => ''], ['a' => 'null_if_empty_string'])->toArray());
     }
 
-    /** @test **/
+    #[Test]
     public function the_return_null_if_empty_string_works()
     {
         $this->assertEquals(['a' => null, 'b' => 'A'], $this->transformer->transform(['a' => '', 'b' => 'a'], ['*' => 'return_null_if_empty_string|uppercase'])->toArray());
     }
 
-    /** @test **/
+    #[Test]
     public function the_drop_if_empty_string_works()
     {
         $this->assertEquals([], $this->transformer->transform(['a' => ''], ['a' => 'drop_if_empty_string'])->toArray());

@@ -4,6 +4,7 @@ namespace Konsulting\Laravel\Transformer;
 
 use Konsulting\Laravel\Transformer\RulePacks\CoreRulePack;
 use Konsulting\Laravel\Transformer\RulePacks\RelatedFieldsRulePack;
+use PHPUnit\Framework\Attributes\Test;
 
 class RelatedfieldsPackTest extends \PlainPhpTestCase
 {
@@ -14,7 +15,7 @@ class RelatedfieldsPackTest extends \PlainPhpTestCase
         $this->transformer = new Transformer([CoreRulePack::class, RelatedFieldsRulePack::class]);
     }
 
-    /** @test */
+    #[Test]
     function it_will_return_null_without_another_field()
     {
         $data = ['a' => 'name'];
@@ -23,7 +24,7 @@ class RelatedfieldsPackTest extends \PlainPhpTestCase
         $this->assertEquals($expected, $this->transformer->transform($data, ['a' => 'null_without:b'])->toArray());
     }
 
-    /** @test */
+    #[Test]
     function it_will_drop_without_another_field()
     {
         $data = ['a' => 'name'];
@@ -32,7 +33,7 @@ class RelatedfieldsPackTest extends \PlainPhpTestCase
         $this->assertEquals($expected, $this->transformer->transform($data, ['a' => 'drop_without:b'])->toArray());
     }
 
-    /** @test */
+    #[Test]
     function it_will_bail_without_another_field()
     {
         $data = ['a' => 'name'];
@@ -41,7 +42,7 @@ class RelatedfieldsPackTest extends \PlainPhpTestCase
         $this->assertEquals($expected, $this->transformer->transform($data, ['a' => 'bail_without:b|uppercase'])->toArray());
     }
 
-    /** @test */
+    #[Test]
     function it_will_return_null_with_another_field()
     {
         $data = ['a' => 'name', 'b' => 'something'];
@@ -50,7 +51,7 @@ class RelatedfieldsPackTest extends \PlainPhpTestCase
         $this->assertEquals($expected, $this->transformer->transform($data, ['a' => 'null_with:b'])->toArray());
     }
 
-    /** @test */
+    #[Test]
     function it_will_drop_with_another_field()
     {
         $data = ['a' => 'name', 'b' => 'something'];
@@ -59,7 +60,7 @@ class RelatedfieldsPackTest extends \PlainPhpTestCase
         $this->assertEquals($expected, $this->transformer->transform($data, ['a' => 'drop_with:b'])->toArray());
     }
 
-    /** @test */
+    #[Test]
     function it_will_bail_with_another_field()
     {
         $data = ['a' => 'name', 'b' => 'something'];

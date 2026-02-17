@@ -5,10 +5,11 @@ namespace Konsulting\Laravel\Transformer;
 use Konsulting\Laravel\Transformer\RulePacks\CoreRulePack;
 use Konsulting\Laravel\Transformer\RulePacks\RelatedFieldsRulePack;
 use Konsulting\Laravel\Transformer\RulePacks\RulePack;
+use PHPUnit\Framework\Attributes\Test;
 
 class TransformerTest extends \PlainPhpTestCase
 {
-    /** @test */
+    #[Test]
     function it_will_load_a_rulePack()
     {
         $transformer = (new Transformer)->addRulePack(new CoreRulePack);
@@ -16,7 +17,7 @@ class TransformerTest extends \PlainPhpTestCase
         $this->assertTrue($transformer->hasRulePack(new CoreRulePack));
     }
 
-    /** @test */
+    #[Test]
     function it_will_trim_a_string()
     {
         $this->assertEquals(
@@ -28,7 +29,7 @@ class TransformerTest extends \PlainPhpTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     function it_will_apply_multiple_transformations()
     {
         $this->assertEquals(
@@ -40,7 +41,7 @@ class TransformerTest extends \PlainPhpTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     function it_applies_rules_to_nested_elements()
     {
         $data = ['a' => [['name' => 'a', 'title' => 'mr'], ['name' => 'b'], ['name' => 'c']]];
@@ -56,7 +57,7 @@ class TransformerTest extends \PlainPhpTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     function it_applies_the_special_case_apply_to_everything_double_star_properly()
     {
         $this->assertEquals(
@@ -68,7 +69,7 @@ class TransformerTest extends \PlainPhpTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     function it_applies_a_rule_to_all_data_at_a_single_level()
     {
         $this->assertEquals(
@@ -80,7 +81,7 @@ class TransformerTest extends \PlainPhpTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     function it_will_bail_from_a_rule_set()
     {
         $this->assertEquals(
@@ -92,7 +93,7 @@ class TransformerTest extends \PlainPhpTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     function it_will_drop_a_field_from_the_data()
     {
         $this->assertEquals(
@@ -104,7 +105,7 @@ class TransformerTest extends \PlainPhpTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     function it_merges_rules()
     {
         $this->assertEquals(
@@ -116,7 +117,7 @@ class TransformerTest extends \PlainPhpTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     function it_returns_an_array_of_loaded_rule_packs()
     {
         $rulePacks = [rulePackOne::class, rulePackTwo::class];
@@ -126,7 +127,7 @@ class TransformerTest extends \PlainPhpTestCase
         $this->assertEquals($rulePacks, $transformer->rulePacks());
     }
 
-    /** @test */
+    #[Test]
     function it_can_retrieve_values_for_use_in_rules_simple()
     {
         $data = ['a' => 'name', 'c' => 'other'];
@@ -136,7 +137,7 @@ class TransformerTest extends \PlainPhpTestCase
         $this->assertEquals($expected, $this->transformer(RelatedFieldsRulePack::class)->transform($data, $transform)->toArray());
     }
 
-    /** @test */
+    #[Test]
     function it_can_retrieve_values_for_use_in_rules_complex()
     {
         $data = ['a' => ['b' => [['name' => 'a', 'other' => 'something'],['name' => 'b'],['name' => 'c']]]];
@@ -148,7 +149,7 @@ class TransformerTest extends \PlainPhpTestCase
         $this->assertEquals($expected, $this->transformer(RelatedFieldsRulePack::class)->transform($data, $transform)->toArray());
     }
 
-    /** @test */
+    #[Test]
     function it_will_allow_rule_sets_to_be_provided_as_arrays()
     {
         $data = ['a' => '  trimmed  '];
@@ -161,7 +162,7 @@ class TransformerTest extends \PlainPhpTestCase
             $this->transformer()->transform($data, $transform)->toArray());
     }
 
-    /** @test */
+    #[Test]
     function it_will_allow_rule_sets_to_contain_closures()
     {
         $data = ['a' => '  trimmed  '];
@@ -176,7 +177,7 @@ class TransformerTest extends \PlainPhpTestCase
             $this->transformer()->transform($data, $transform)->toArray());
     }
 
-    /** @test */
+    #[Test]
     function it_will_allow_rule_sets_to_contain_transform_rules()
     {
         $data = ['a' => '  trimmed  '];
@@ -189,7 +190,7 @@ class TransformerTest extends \PlainPhpTestCase
             $this->transformer()->transform($data, $transform)->toArray());
     }
 
-    /** @test */
+    #[Test]
     function it_will_not_remove_other_fields_that_start_with_the_same_prefix_but_are_not_part_of_the_array()
     {
         $data = ['a' => '  trimmed  ', 'a_bc' => 'funky'];

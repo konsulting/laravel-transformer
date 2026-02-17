@@ -165,7 +165,7 @@ class Transformer
             $this->loopIndices = $set['indices'];
 
             foreach ($set['set'] as $rule => $parameters) {
-                $input = $this->data->fromDot($field)->first();
+                $input = $this->data->dotGet($field);
 
                 if ($parameters instanceof Closure) {
                     $result = $parameters($input);
@@ -335,7 +335,7 @@ class Transformer
         $split = explode(':', $expression, 2);
 
         $rule = $this->validateRule($split[0]);
-        $parameters = empty($split[1]) ? [] : str_getcsv($split[1]);
+        $parameters = empty($split[1]) ? [] : str_getcsv($split[1], ',', '"', '');
 
         return [$rule => $parameters];
     }

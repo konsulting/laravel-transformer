@@ -4,10 +4,11 @@ namespace Konsulting\Laravel\Transformer;
 
 use Illuminate\Http\Request;
 use Konsulting\Laravel\Transformer\Middleware\TransformRequest;
+use PHPUnit\Framework\Attributes\Test;
 
 class MiddlewareTest extends \LaravelTestCase
 {
-    /** @test */
+    #[Test]
     function it_trims_and_nullifies_empty_strings_request_data()
     {
         $request = Request::create('', 'POST', ['name' => '   a b c     ', 'email' => '', 'address' => '     ']);

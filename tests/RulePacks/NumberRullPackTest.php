@@ -3,6 +3,7 @@
 namespace Konsulting\Laravel\Transformer;
 
 use Konsulting\Laravel\Transformer\RulePacks\NumberRulePack;
+use PHPUnit\Framework\Attributes\Test;
 
 class NumberRullPackTest extends \PlainPhpTestCase
 {
@@ -13,7 +14,7 @@ class NumberRullPackTest extends \PlainPhpTestCase
         $this->transformer = new Transformer(NumberRulePack::class);
     }
 
-    /** @test */
+    #[Test]
     function the_clamp_rule_clamps_correctly()
     {
         // in range
